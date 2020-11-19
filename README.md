@@ -492,7 +492,44 @@ $ docker-compose -f docker-compose.prod.yml down -v
 $ sudo docker-compose -f docker-compose.prod.yml up -d --build
 $ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 ```
+5. Upload changes to GitHub
+```
+$ git add *
+$ git status
+$ git add .gitignore
+$ git commit -m "Running Docker in production mode"
+$ git push
+```
 
+#### Clean up directory structure.
+Ensuring that Django project and Dockerfiles have separate directory reduces mess significantly, thus, reducing potential errors arising from confusion.
+1. Create *app* folder in the main directory
+2. Move *webdevsite*, *manage.py*, entrypoints, *requirements.txt* and Dockerfiles into the *app* directory.
+3. Update *docker-compose.yml*
+```
+[5]   build: ./app
+[8]   - ./app/:/app/
+```
+4. Restart the container to see if it works
+```
+$ docker-compose -f docker-compose.prod.yml down -v
+$ sudo docker-compose up -d --build
+$ sudo docker-compose exec web python manage.py migrate --noinput
+```
+5. Update *docker-compose.prod.yml*
+```
+[6]   context: ./app
+```
+6. Restart the container to see if it works
+```
+$ docker-compose down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+```
+7. Spin it down
+```
+$ docker-compose -f docker-compose.prod.yml down -v
+```
 
 
 ## Errors

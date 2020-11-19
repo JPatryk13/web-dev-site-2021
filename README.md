@@ -456,8 +456,8 @@ WORKDIR $APP_HOME
 
 # install dependencies
 RUN apk update && apk add libpq
-COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
+COPY --from=builder /app/wheels /wheels
+COPY --from=builder /app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
 # copy entrypoint-prod.sh
@@ -478,7 +478,21 @@ ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
 * It uses multi-stage build. The builder stage creates an image necessary to set up an environment for the project and installs packages. The final stage is running the container.
 * flake8 is a module that examines the code against the coding convention PEP8 (lint software). It doesn't work well with virtual environment files so they are excluded
 * Then packages are installed. `--no-cache-dir` - doesn't store installed modules in cache (reducing image size), `--no-deps` - don't install package dependencies, `--wheel-dir /app/wheels` - stores wheels (build packages) in the directory specified
-*
+* Final stage creates a directory and uses *wheels* and *requirements.txt* to install packages.
+* Then copies files and switches to the *app* user.
+3. Update *docker-compose.prod.yml*
+```
+build:
+  context: .
+  dockerfile: Dockerfile.prod
+```
+4. Restart the container and run migrations
+```
+$ docker-compose -f docker-compose.prod.yml down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+```
+
 
 
 ## Errors
@@ -542,4 +556,17 @@ $ cd postgres_data
 bash: cd: postgres_data: Permission denied
 
 $ sudo rm -rf postgres_data
+```
+4. Messed up directories
+```
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+...
+Step 20/27 : COPY --from=builder ./wheels /wheels
+ERROR: Service 'web' failed to build: COPY failed: stat /var/lib/docker/overlay2/e2b1fc7c000f161443678ce03fe39a9274e4cabfc531870b494664d63955b2b2/merged/wheels: no such file or directory
+```
+Have: `RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt`, `COPY --from=builder ./wheels /wheels`
+Update:
+```
+COPY --from=builder /app/wheels /wheels
+COPY --from=builder /app/requirements.txt .
 ```

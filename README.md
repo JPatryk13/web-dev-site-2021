@@ -526,10 +526,114 @@ $ docker-compose down -v
 $ sudo docker-compose -f docker-compose.prod.yml up -d --build
 $ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
 ```
-7. Spin it down
+7. Spin it down and upload changes to github
 ```
 $ docker-compose -f docker-compose.prod.yml down -v
+$ git add *
+$ git status
+$ git commit -m "Rearranged directory structure"
+$ git push
 ```
+
+#### Nginx.
+1. Update *docker-compose.prod.yml* by adding nginx service
+```
+nginx:
+  build: ./nginx
+  ports:
+    - 1337:80
+  depends_on:
+    - web
+```
+2. Also in the *docker-compose.prod.yml* file, expose (for internal connections) port 8000
+```
+[9]   expose:
+[10]    - 8000
+```
+3. Create the following dir structure
+```
+nginx
+ ├── Dockerfile
+ └── nginx.conf
+```
+4. *Dockerfile*
+```
+FROM nginx:1.19.0-alpine
+
+RUN rm /etc/nginx/conf.d/default.conf
+COPY nginx.conf /etc/nginx/conf.d
+```
+5. *nginx.conf*
+```
+upstream webdevsite {
+    server web:8000;
+}
+
+server {
+
+    listen 80;
+
+    location / {
+        proxy_pass http://webdevsite;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header Host $host;
+        proxy_redirect off;
+    }
+
+}
+```
+6. Test if it works
+```
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+```
+
+#### Static Files.
+1. Run `$ docker-compose -f docker-compose.prod.yml down -v`
+2. Update *settings.py*
+```
+STATIC_URL = "/staticfiles/"
+STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
+```
+3. Run the container in development and open *localhost:8000/admin* to check if static files are served correctly
+```
+$ sudo docker-compose up -d --build
+```
+4. For production, add `static_volume` in *docker-compose.prod.yml* in services `web` and `nginx`.
+```
+volumes:
+  - static_volume:/home/app/web/staticfiles
+```
+Add `static_volume:` in `volumes:`
+5. Add `RUN mkdir $APP_HOME/staticfiles` in *Dockerfile.prod*
+```
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+WORKDIR $APP_HOME
+```
+6. Update *nginx.conf* by adding:
+```
+location /staticfiles/ {
+    alias /home/app/web/staticfiles/;
+}
+```
+7. Test - go to *localhost:1337/admin*
+```
+$ docker-compose down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+...
+$ docker-compose -f docker-compose.prod.yml down -v
+```
+8.
+
+
+#### In-container directory structure.
+
+
 
 
 ## Errors

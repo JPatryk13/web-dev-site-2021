@@ -86,7 +86,7 @@ $ pip install gunicorn==20.0.4
 $ gunicorn webdevsite.wsgi:application --bind 0.0.0.0:8000
 ```
 
-#### Docker.
+#### Docker and PostgreSQL.
 
 1. Check if Docker and docker-compose are installed and have appropriate versions (docker: 19.03.13, docker-compose: 1.25.4)
 ```
@@ -274,6 +274,211 @@ exec "$@"
 ENTRYPOINT ["/app/entrypoint.sh"]
 ```
 * Update permissions `$ chmod +x entrypoint.sh`
+14. Rebuild Docker container
+```
+$ docker-compose down -v
+$ sudo docker-compose up -d --build
+```
+15. Go to *localhost:8000* to check if everything is running
+16. Upload changes to GitHub
+```
+$ git add *
+$ git status
+...
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        .env.dev
+$ git add .env.dev
+$ git commit -m "Webdevsite is now running locally on Docker with PostgreSQL"
+$ git push
+```
+
+#### Gunicorn (2).
+
+1. Ensure that `gunicorn==20.0.4` is in the *requirements.txt*
+2. Create a *docker-compose.prod.yml* file
+```
+version: '3.7'
+
+services:
+  web:
+    build: .
+    command: gunicorn webdevsite.wsgi:application --bind 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    env_file:
+      - ./.env.prod
+    depends_on:
+      - db
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./.env.prod.db
+
+volumes:
+  postgres_data:
+```
+Changes compared to the *docker-compose.yml*
+* `command`: Running server from `gunicorn` rather than `python manage.py`
+* `volumes`: Not created for `web` service in production environment
+* different `env_file`
+* environment variables stored in a `.env.prod.db` file for production
+3. Generate `SECRET_KEY`
+```
+$ source virt/bin/activate
+$ python -c 'from django.core.management.utils import get_random_secret_key; print(get_random_secret_key())'
+```
+4. Generate `SQL_PASSWORD`
+```
+$ python -c 'from django.utils.crypto import get_random_string; print(get_random_string(length=32))'
+```
+5. Create *.env.prod*
+```
+DEBUG=0
+SECRET_KEY= ...
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 [::1]
+SQL_ENGINE=django.db.backends.postgresql
+SQL_DATABASE=webdevsite_prod
+SQL_USER= ...
+SQL_PASSWORD= ...
+SQL_HOST=db
+SQL_PORT=5432
+DATABASE=postgres
+```
+6. Create *.env.prod.db*
+```
+POSTGRES_USER= ...
+POSTGRES_PASSWORD= ...
+POSTGRES_DB=webdevsite_prod
+```
+7. Check *.gitignore*
+* add *.env.prod* and *.env.prod.db*
+* remove *.env.dev* if exists
+8. Rebuild containers
+```
+$ docker-compose down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+```
+*If the container fails to start, check for errors in the logs via* `$ sudo docker-compose -f docker-compose.prod.yml logs -f`.
+9. Check if containers are running
+```
+$ docker ps -a
+```
+10. Check if the database *webdevsite_prod* was created.
+```
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput
+$ sudo docker-compose -f docker-compose.prod.yml exec db psql --username=patryk --dbname=webdevsite_prod
+...
+# \l
+...
+# \c webdevsite_prod
+...
+# \dt
+...
+# \q
+```
+
+#### Production Docker.
+
+1. Create *entrypoint.prod.sh*
+```
+#!/bin/sh
+
+if [ "$DATABASE" = "postgres" ]
+then
+    echo "Waiting for postgres..."
+
+    while ! nc -z $SQL_HOST $SQL_PORT; do
+      sleep 0.1
+    done
+
+    echo "PostgreSQL started"
+fi
+
+exec "$@"
+```
+It skips flushing the database and automatic migrations.
+* Update permissions
+```
+$ chmod +x entrypoint.prod.sh
+```
+2. Create a *Dockerfile.prod*
+```
+###########
+# BUILDER #
+###########
+
+# pull official base image
+FROM python:3.8.6-alpine AS builder
+
+# set work directory
+WORKDIR /app
+
+# set environment variables
+ENV PYTHONDONTWRITEBYTECODE 1
+ENV PYTHONUNBUFFERED 1
+
+# install psycopg2 dependencies
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev
+
+# lint
+RUN pip install --upgrade pip
+RUN pip install flake8
+COPY . .
+RUN flake8 --ignore=E501,F401 --exclude=virt/ .
+
+# install dependencies
+COPY ./requirements.txt .
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /app/wheels -r requirements.txt
+
+
+#########
+# FINAL #
+#########
+
+# pull official base image
+FROM python:3.8.6-alpine
+
+# create directory for the app user
+RUN mkdir -p /home/app
+
+# create the app user
+RUN addgroup -S app && adduser -S app -G app
+
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+WORKDIR $APP_HOME
+
+# install dependencies
+RUN apk update && apk add libpq
+COPY --from=builder /usr/src/app/wheels /wheels
+COPY --from=builder /usr/src/app/requirements.txt .
+RUN pip install --no-cache /wheels/*
+
+# copy entrypoint-prod.sh
+COPY ./entrypoint.prod.sh $APP_HOME
+
+# copy project
+COPY . $APP_HOME
+
+# chown all the files to the app user
+RUN chown -R app:app $APP_HOME
+
+# change to the app user
+USER app
+
+# run entrypoint.prod.sh
+ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+```
+* It uses multi-stage build. The builder stage creates an image necessary to set up an environment for the project and installs packages. The final stage is running the container.
+* flake8 is a module that examines the code against the coding convention PEP8 (lint software). It doesn't work well with virtual environment files so they are excluded
+* Then packages are installed. `--no-cache-dir` - doesn't store installed modules in cache (reducing image size), `--no-deps` - don't install package dependencies, `--wheel-dir /app/wheels` - stores wheels (build packages) in the directory specified
+*
 
 
 ## Errors

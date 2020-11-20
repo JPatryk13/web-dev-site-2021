@@ -502,6 +502,7 @@ $ git push
 ```
 
 #### Clean up directory structure.
+
 Ensuring that Django project and Dockerfiles have separate directory reduces mess significantly, thus, reducing potential errors arising from confusion.
 1. Create *app* folder in the main directory
 2. Move *webdevsite*, *manage.py*, entrypoints, *requirements.txt* and Dockerfiles into the *app* directory.
@@ -536,6 +537,7 @@ $ git push
 ```
 
 #### Nginx.
+
 1. Update *docker-compose.prod.yml* by adding nginx service
 ```
 nginx:
@@ -589,6 +591,7 @@ $ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migra
 ```
 
 #### Static Files.
+
 1. Run `$ docker-compose -f docker-compose.prod.yml down -v`
 2. Update *settings.py*
 ```
@@ -628,15 +631,94 @@ $ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py colle
 ...
 $ docker-compose -f docker-compose.prod.yml down -v
 ```
+8. Upload changes to GitHub
+
+#### In-container directory structure for production.
+
+1. In *Dockerfile.prod*
+```
+[9]   WORKDIR /usr/src/app
+[27]  RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+[52]  COPY --from=builder /usr/src/app/wheels /wheels
+[53]  COPY --from=builder /usr/src/app/requirements.txt .
+```
+2. Run `$ sudo docker-compose -f docker-compose.prod.yml up -d --build` and `sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear` and go to *localhost:1337/admin*
+
+#### Backend (part 1).
+1. Create an app
+```
+$ docker-compose -f docker-compose.prod.yml down -v
+$ sudo docker-compose up -d --build
+$ sudo docker-compose exec web python manage.py startapp website
+```
+2. In *settings.py* add the app to `INSTALLED_APPS`.
+3. Change owner of the *website* app
+```
+$ sudo chwon -R $USER ./app/website
+```
+4. Create models `Project()` and `Link()`
+5. Register models in *admin.py*
+6. Add *Pillow==8.0.1* to *requirements.txt*
+7. Add Pillow dependencies to *Dockerfile*
+```
+# install Pillow dependencies
+RUN apk --no-cache add jpeg-dev \
+        zlib-dev \
+        freetype-dev \
+        lcms2-dev \
+        openjpeg-dev \
+        tiff-dev \
+        tk-dev \
+        tcl-dev \
+        harfbuzz-dev \
+        fribidi-dev
+```
+6. Restart the container, run migrations and create super user
+```
+$ docker-compose down -v && sudo docker-compose up -d --build
+$ sudo docker-compose exec web python manage.py makemigrations
+$ sudo docker-compose exec web python manage.py migrate --noinput
+$ sudo docker-compose exec web python manage.py createsuperuser
+$ docker-compose down -v
+```
+
+#### Create Superuser.
+
+1. In the *website* app directory, create *createsu.py* file at *management/commands*
+```
+from django.core.management.base import BaseCommand
+from django.contrib.auth.models import User
+import os
+
+
+class Command(BaseCommand):
+
+    def handle(self, *args, **options):
+        if not User.objects.filter(username=os.environ['SU_NAME']).exists():
+            User.objects.create_superuser(os.environ['SU_NAME'], os.environ['SU_EMAIL'], os.environ['SU_PASSWORD'])
+```
+2. In *.env.dev* add SU_NAME, SU_EMAIL, SU_PASSWORD
+3. Add `python manage.py createsu` to the *entrypoint.sh*
+4. Run `$ sudo docker-compose up -d --build`
+5. Go to *localhost:8000/admin* and log in
+6. Spin down containers, `$ docker-compose down -v`
+
+#### Media Files.
+
+1. Update *settings.py* (add i ton the bottom)
+```
+MEDIA_URL = "/mediafiles/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+```
+2. Run `$ sudo docker-compose up -d --build`
+7. Go to *localhost:8000/admin* and add a project (https://www.lipsum.com/).
 8.
-
-
-#### In-container directory structure.
 
 
 
 
 ## Errors
+
 1. Permissions
 ```
 $ docker-compose up -d --build
@@ -711,3 +793,52 @@ Update:
 COPY --from=builder /app/wheels /wheels
 COPY --from=builder /app/requirements.txt .
 ```
+5. Missing dependencies for Pillow
+```
+& sudo docker-compose up -d --build
+...
+Traceback (most recent call last):                                              
+  File "<string>", line 1, in <module>                                          
+  File "/tmp/pip-install-ix6mw5a4/pillow/setup.py", line 914, in <module>       
+    raise RequiredDependencyException(msg)                                      
+__main__.RequiredDependencyException:                                           
+
+The headers or library files could not be found for zlib,                       
+a required dependency when compiling Pillow from source.
+```
+Solution: add Pillow dependencies to Dockerfile
+```
+# install Pillow dependencies
+RUN apk --no-cache add jpeg-dev \
+        zlib-dev \
+        freetype-dev \
+        lcms2-dev \
+        openjpeg-dev \
+        tiff-dev \
+        tk-dev \
+        tcl-dev \
+        harfbuzz-dev \
+        fribidi-dev
+```
+6. Running createsu custom management command
+```
+@Dockerfile
+...
+# copy project
+COPY . .
+
+# create super user
+RUN python manage.py createsu
+
+# run entrypoint.sh
+ENTRYPOINT ["/app/entrypoint.sh"]
+```
+```
+$ sudo docker-compose up -d --build
+...
+File "/app/webdevsite/settings.py", line 29, in <module>                        
+    ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')             
+AttributeError: 'NoneType' object has no attribute 'split'                        
+ERROR: Service 'web' failed to build: The command '/bin/sh -c python manage.py createsu' returned a non-zero code: 1
+```
+Solution: add `python manage.py createsu` to the *entrypoint.sh*

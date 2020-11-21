@@ -642,7 +642,7 @@ $ docker-compose -f docker-compose.prod.yml down -v
 [52]  COPY --from=builder /usr/src/app/wheels /wheels
 [53]  COPY --from=builder /usr/src/app/requirements.txt .
 ```
-2. Run `$ sudo docker-compose -f docker-compose.prod.yml up -d --build` and `sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear` and go to *localhost:1337/admin*
+2. Run `$ sudo docker-compose -f docker-compose.prod.yml up -d --build` and `$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear` and go to *localhost:1337/admin*
 
 #### Backend (part 1).
 1. Create an app
@@ -659,7 +659,7 @@ $ sudo chwon -R $USER ./app/website
 4. Create models `Project()` and `Link()`
 5. Register models in *admin.py*
 6. Add *Pillow==8.0.1* to *requirements.txt*
-7. Add Pillow dependencies to *Dockerfile*
+7. Add Pillow dependencies to *Dockerfile* and *Dockerfile.prod*
 ```
 # install Pillow dependencies
 RUN apk --no-cache add jpeg-dev \
@@ -682,7 +682,7 @@ $ sudo docker-compose exec web python manage.py createsuperuser
 $ docker-compose down -v
 ```
 
-#### Create Superuser.
+#### Create Superuser (dev).
 
 1. In the *website* app directory, create *createsu.py* file at *management/commands*
 ```
@@ -697,13 +697,14 @@ class Command(BaseCommand):
         if not User.objects.filter(username=os.environ['SU_NAME']).exists():
             User.objects.create_superuser(os.environ['SU_NAME'], os.environ['SU_EMAIL'], os.environ['SU_PASSWORD'])
 ```
-2. In *.env.dev* add SU_NAME, SU_EMAIL, SU_PASSWORD
+2. In *.env.dev* add `SU_NAME`, `SU_EMAIL`, `SU_PASSWORD`
 3. Add `python manage.py createsu` to the *entrypoint.sh*
 4. Run `$ sudo docker-compose up -d --build`
 5. Go to *localhost:8000/admin* and log in
 6. Spin down containers, `$ docker-compose down -v`
+7. Upload changes to GitHub
 
-#### Media Files.
+#### Media Files (dev).
 
 1. Update *settings.py* (add i ton the bottom)
 ```
@@ -711,10 +712,64 @@ MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
 ```
 2. Run `$ sudo docker-compose up -d --build`
-7. Go to *localhost:8000/admin* and add a project (https://www.lipsum.com/).
-8.
+7. Go to *localhost:8000/admin*, log in with *SU_NAME* and *SU_PASSWORD* and add a project (https://www.lipsum.com/).
+8. Check if the file exists
+```
+$ docker ps
+CONTAINER ID        IMAGE                  COMMAND                  CREATED             STATUS              PORTS                    NAMES
+5c479264ca84        webdevsite_web         "/app/entrypoint.sh …"   5 minutes ago       Up 5 minutes        0.0.0.0:8000->8000/tcp   webdevsite_web_1
+47e23b94e902        postgres:12.4-alpine   "docker-entrypoint.s…"   5 minutes ago       Up 5 minutes        5432/tcp                 webdevsite_db_1
+$ docker exec -it 5c479264ca84 /bin/sh
+/app # ls
+Dockerfile          entrypoint.sh       projects            website
+Dockerfile.prod     manage.py           requirements.txt
+entrypoint.prod.sh  mediafiles          webdevsite
+/app # cd mediafiles
+/app/mediafiles # cd projects
+/app/mediafiles/projects # ls
+Slide1.JPG
+```
 
+#### Create Superuser (prod)
 
+1. Generate random `SU_PASSWORD` and `SU_NAME` prefix
+```
+$ python -c 'from django.utils.crypto import get_random_string; print(get_random_string(length=32))'
+$ python -c 'from django.utils.crypto import get_random_string; print(get_random_string(length=8))'
+```
+2. In *.env.prod* add `SU_NAME`, `SU_EMAIL`, `SU_PASSWORD`
+3. Add `python manage.py createsu` to the *entrypoint.prod.sh*
+
+#### Media Files (prod).
+
+1. Add `- media_volume:/home/app/web/mediafiles` in *web* and *nginx* services and add `media_volume:` in *volumes*
+2. Update *Dockerfile.prod*
+```
+...
+# create the appropriate directories
+ENV HOME=/home/app
+ENV APP_HOME=/home/app/web
+RUN mkdir $APP_HOME
+RUN mkdir $APP_HOME/staticfiles
+RUN mkdir $APP_HOME/mediafiles
+WORKDIR $APP_HOME
+...
+```
+3. Update *nginx.conf*
+```
+...
+location /mediafiles/ {
+    alias /home/app/web/mediafiles/;
+}
+...
+```
+4. Add `python manage.py makemigrations` and `python manage.py migrate --noinput` to *entrypoint.prod.sh*
+4. Rebuild the container
+```
+$ docker-compose down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+```
 
 
 ## Errors
@@ -842,3 +897,46 @@ AttributeError: 'NoneType' object has no attribute 'split'
 ERROR: Service 'web' failed to build: The command '/bin/sh -c python manage.py createsu' returned a non-zero code: 1
 ```
 Solution: add `python manage.py createsu` to the *entrypoint.sh*
+7. Missing *reverse* library in *models.py*
+```
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+...
+Step 9/28 : RUN flake8 --ignore=E501,F401 --exclude=virt/ .
+ ---> Running in ef16826fea69
+./website/models.py:44:16: F821 undefined name 'reverse'
+```
+Solution: add `from django.urls import reverse` to *models.py*
+8. Migrating failed on ImageField (Pillow)
+```
+$ sudo docker-compose -f docker-compose.prod.yml exec app python manage.py migrate --noinput
+...
+Cannot use ImageField because Pillow is not installed.
+    HINT: Get Pillow at https://pypi.org/project/Pillow/ or run command "python -m pip install Pillow".
+```
+Solution: add `python manage.py makemigrations` and `python manage.py migrate --noinput` to *entrypoint.prod.sh*
+9. Failing to create *db* container
+```
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
+$ docker ps -a
+CONTAINER ID        IMAGE                  COMMAND                  CREATED              STATUS                          PORTS                  NAMES
+02eeea4de593        webdevsite_nginx       "/docker-entrypoint.…"   58 seconds ago       Up 55 seconds                   0.0.0.0:1337->80/tcp   webdevsite_nginx_1
+00efcbbb763f        webdevsite_web         "/home/app/web/entry…"   About a minute ago   Up 57 seconds                   8000/tcp               webdevsite_web_1
+d5a19826e0a1        postgres:12.0-alpine   "docker-entrypoint.s…"   About a minute ago   Exited (1) About a minute ago                          webdevsite_db_1
+$ docker logs d5a19826e0a1
+...
+fixing permissions on existing directory /var/lib/postgresql/data ... ok
+initdb: error: could not create directory "/var/lib/postgresql/data/pg_wal": No space left on device
+initdb: removing contents of data directory "/var/lib/postgresql/data"
+```
+Solution: remove some old images (https://docs.docker.com/engine/reference/commandline/image_prune/)
+```
+$ docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'
+REPOSITORY          TAG                 IMAGE ID            CREATED AT                      SIZE
+webdevsite_web      latest              3545b1c6ebbc        2020-11-20 15:29:41 +0000 GMT   91.5MB
+<none>              <none>              f9bd24327c5a        2020-11-20 15:29:11 +0000 GMT   571MB
+webdevsite_nginx    latest              b750759402de        2020-11-20 14:22:54 +0000 GMT   21.3MB
+<none>              <none>              8b87beff5842        2020-11-20 14:22:52 +0000 GMT   91.5MB
+<none>              <none>              e6efbf56ba2e        2020-11-20 14:22:09 +0000 GMT   571MB
+...
+$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"
+```

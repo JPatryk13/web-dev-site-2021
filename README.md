@@ -38,10 +38,10 @@ Web development services entrepreneurship website. Using: **Docker** via running
 - [ ] Back-end (Models, Views, Templates)
   - [x] Create models for table Project and Link and register it in admin.py
   - [x] Set LANGUAGE_CODE to en-gb and TIME_ZONE to Europe/London in settings.py
-  - [ ] Create urls.py in website directory and hook up url mapper so that it still works
-  - [ ] Define and create URL structure
-  - [ ] Use decorators (class orientation) to register models in admin.py
-  - [ ] Create base views (functions) - redirecting
+  - [x] Create urls.py in website directory and hook up url mapper so that it still works
+  - [x] Define and create URL structure
+  - [x] Use decorators (class orientation) to register models in admin.py
+  - [ ] Create base views (functions/classes) - redirecting
   - [ ] Create templates for each page (inc. navbar and footbar partials, base and image upload templates)
     - [ ] File structure
     - [ ] HTML boiler template
@@ -87,7 +87,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [ ] Ensure you have a domain
   - [ ] Deploy files to the server
   - [ ] Get SSL certificate
-  - [ ] Test the website for public access from multiple devices though https protocol
+  - [ ] Test the website for public access from multiple devices through https protocol
 
 ## Stack:
  - Docker
@@ -997,6 +997,18 @@ urlpatterns = [
     path('/upload-image/', views.upload_image, name='upload-image'),
 ]
 ```
+5. Re-register models in *admin.py* using decorators
+```
+@admin.register(Project)
+class ProjectAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Link)
+class LinkAdmin(admin.ModelAdmin):
+    pass
+```
+6.
 
 
 

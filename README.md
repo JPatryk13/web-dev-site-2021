@@ -1,6 +1,42 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
+- [x] Base project
+  - [x] Create GitHub repo and clone it
+  - [x] Define prerequisites, stack and plan
+  - [x] Set up virtual environment
+  - [x] Set up basic Django project and test it
+- [x] Development Set-up (Dockerize Django, PostgreSQL)
+  - [x] Test if Docker is working
+  - [x] Create Dockerfile for development environment
+  - [x] Install postgresql
+  - [x] Create docker-compose file for development
+  - [x] Create .env file for development
+  - [x] Update settings file
+  - [x] Test database
+  - [x] Create entrypoint file for development
+- [x] Production Set-up (Gunicorn, Nginx)
+  - [x] Install Gunicorn
+  - [x] Create Dockerfile.prod
+  - [x] Create docker-compose.prod.yml
+  - [x] Create .env.prod and .env.prod.db
+  - [x] Create entrypoint.prod.sh
+  - [x] Set up Nginx
+- [x] Static/Media Files and Super User
+  - [x] Create an app and add it to INSTALLED_APPS
+  - [x] Create a custom management command for creating a super user with pre-defined input
+  - [x] Generate superuser credentials and add it to the .env.prod file
+  - [x] Add management commands to the entrypoint files for development and production
+  - [x] Add static and media files volumes in the docker-compose.prod.yml
+  - [x] Update Dockerfile.prod for creating appropriate directory structure withing the container
+  - [x] Update nginx.conf for static and media files directories
+  - [x] update settings file for media/static files
+  - [x] Create a view that serves for saving media files
+  - [x] Create a template that allows for saving images
+  - [x] Update urls.py so it allows for accessing the view and serves media files in development
+- [ ] Backend (Models, Views, Templates)
+  - [x] Create models for table Project and Link and register it in admin.py
+
 ## Stack:
  - Docker
  - Django (Python)
@@ -706,7 +742,7 @@ class Command(BaseCommand):
 
 #### Media Files (dev).
 
-1. Update *settings.py* (add i ton the bottom)
+1. Update *settings.py* (add it on the bottom)
 ```
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
@@ -764,11 +800,122 @@ location /mediafiles/ {
 ...
 ```
 4. Add `python manage.py makemigrations` and `python manage.py migrate --noinput` to *entrypoint.prod.sh*
-4. Rebuild the container
+5. Rebuild the container
 ```
 $ docker-compose down -v
 $ sudo docker-compose -f docker-compose.prod.yml up -d --build
 $ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py collectstatic --no-input --clear
+...
+```
+
+
+**MAJOR ERROR: COULD NOT MAKE PILLOW WORK IN PRODUCTION ENVIRONMENT**
+- See *ERROR #8* for more
+- Plan: restructure the Project table to save URLs for images instead of using ImageField, remove Pillow, create view and urls structure appropriate for testing, create template appropriate for testing, deploy the app and try uploading an image. Later the view and template will look entirely different to make adding images accessible only from superuser account and to incorporate the table. It can be a ground for administration panel.
+
+#### Backend - inc. media files (part 2).
+1. Replace *ImageField* with *URLField* in *models.py*
+```
+[25]  img = models.URLField(max_length=1000)
+```
+2. Create view for the image upload
+```
+# https://docs.djangoproject.com/en/3.1/topics/http/views/
+
+from django.shortcuts import render
+from django.core.files.storage import FileSystemStorage
+
+
+def image_upload(request):
+    # If the page was previously open and the image is being uploaded the code beneath
+    # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
+    if request.method == "POST" and request.FILES["image_file"]:
+        # If the method in the request was POST get the image that is to be uploaded
+        image_file = request.FILES["image_file"]
+
+        # https://docs.djangoproject.com/en/3.1/ref/files/storage/#the-filesystemstorage-class
+        fs = FileSystemStorage()
+        # Get the image url (where it is going to be saved) and print it
+        filename = fs.save(image_file.name, image_file)
+        image_url = fs.url(filename)
+        print(image_url)
+
+        # Save the image at the generated url
+        return render(request, "upload.html", {
+            "image_url": image_url
+        })
+    # Else: display the upload page
+    return render(request, "upload.html")
+```
+3. Create a template in *website/templates* for the image upload
+```
+{% block content %}
+
+  <form action="{% url "upload" %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    <input type="file" name="image_file">
+    <input type="submit" value="submit" />
+  </form>
+
+  {% if image_url %}
+    <p>File uploaded at: <a href="{{ image_url }}">{{ image_url }}</a></p>
+  {% endif %}
+
+{% endblock %}
+```
+4. Edit *webdevsite/urls.py*
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from website.views import image_upload
+
+urlpatterns = [
+    # Temporary direct url to the upload view in the website app
+    path("", image_upload, name="upload"),
+    path('admin/', admin.site.urls),
+]
+
+# Uses local storage for media files in development
+if bool(settings.DEBUG):
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+```
+5. Remove *Pillow* deps from *Dockerfile*
+6. Run `$ sudo docker-compose up -d --build` and go to *localhost:8000*
+7. Remove *Pillow* deps from *Dockerfile.prod*
+8. Run `$ docker-compose down -v && sudo docker-compose -f docker-compose.prod.yml up -d --build` and go to *localhost:1337*
+9. Make sure that management commands are included in *entrypoint.sh*
+```
+[14]  python manage.py flush --no-input
+[15]  python manage.py makemigrations --noinput
+[16]  python manage.py migrate
+[17]  python manage.py createsu
+[18]  python manage.py collectstatic --noinput
+```
+10. Make sure that management commands are included in *entrypoint.prod.sh*
+```
+[14]  python manage.py makemigrations --noinput
+[15]  python manage.py migrate
+[16]  python manage.py createsu
+[17]  python manage.py collectstatic --noinput
+```
+11. Re-run development environment
+```
+$ docker-compose -f docker-compose.prod.yml down -v
+$ sudo docker-compose up -d --build
+```
+12. Check if the container was run without errors
+```
+$ docker ps
+$ docker logs <CONTAINER ID>
+```
+13. Go to *localhost:8000*, upload an image and click the link to see if was correctly uploaded
+14. Spin up production container
+```
+$ docker-compose down -v
+$ sudo docker-compose -f docker-compose.prod.yml up -d --build
 ```
 
 
@@ -913,7 +1060,34 @@ $ sudo docker-compose -f docker-compose.prod.yml exec app python manage.py migra
 Cannot use ImageField because Pillow is not installed.
     HINT: Get Pillow at https://pypi.org/project/Pillow/ or run command "python -m pip install Pillow".
 ```
-Solution: add `python manage.py makemigrations` and `python manage.py migrate --noinput` to *entrypoint.prod.sh*
+Solution (attempt 1): add `python manage.py makemigrations` and `python manage.py migrate --noinput` to *entrypoint.prod.sh*
+Result: Containers sucessfully built, although, the error persists when trying to open *localhost:1337/admin* (*Server Error (500)*)
+Solution: Add another dependencies for Pillow in *Dockerfile* and *Dockerfile.prod*
+```
+...
+# install Pillow dependencies
+RUN apk --no-cache add jpeg-dev \
+        zlib-dev \
+        freetype-dev \
+        lcms2-dev \
+        openjpeg-dev \
+        tiff-dev \
+        tk-dev \
+        tcl-dev \
+        harfbuzz-dev \
+        fribidi-dev \
+        libjpeg \
+        libpq
+...
+```
+Result: Running `$ sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput` results in the same error
+* Test different versions of Pillow (6.2.1, 6.2.2, 7.0.0, 7.1.0, 7.1.1, 7.1.2, 7.2.0, 8.0.0, 8.0.1) (running `$ docker-compose -f docker-compose.prod.yml down -v && sudo docker-compose -f docker-compose.prod.yml up -d --build && sudo docker-compose -f docker-compose.prod.yml exec web python manage.py migrate --noinput` after each change). Versions failed: 8.0.1, 8.0.0, 7.2.0, 7.1.2, 7.1.1, 7.1.0.
+* Trying slim-buster
+* Trying different version of python
+* Trying different set of dependencies
+* Trying old directory structure
+* Trying to install it not from wheels
+* Trying single-stage build
 9. Failing to create *db* container
 ```
 $ sudo docker-compose -f docker-compose.prod.yml up -d --build

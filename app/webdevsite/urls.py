@@ -15,7 +15,17 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+from website.views import image_upload
 
 urlpatterns = [
+    # Temporary direct url to the upload view in the website app
+    path("", image_upload, name="upload"),
     path('admin/', admin.site.urls),
 ]
+
+# Uses local storage for media files in development
+if bool(settings.DEBUG):
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

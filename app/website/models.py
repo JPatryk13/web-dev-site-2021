@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class Project(models.Model):
@@ -21,7 +22,7 @@ class Project(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    img = models.ImageField(upload_to='projects', editable=True)
+    img = models.URLField(max_length=1000)
 
     # When status set to 'e', the project post won't be public
     STATUS = (

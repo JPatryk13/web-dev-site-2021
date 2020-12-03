@@ -12,7 +12,9 @@ then
 fi
 
 python manage.py flush --no-input
+python manage.py makemigrations --noinput
 python manage.py migrate
 python manage.py createsu
+python manage.py collectstatic --noinput
 
 exec "$@"

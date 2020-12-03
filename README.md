@@ -1,6 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
+**PLAN 1.00**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -34,8 +35,59 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Create a view that serves for saving media files
   - [x] Create a template that allows for saving images
   - [x] Update urls.py so it allows for accessing the view and serves media files in development
-- [ ] Backend (Models, Views, Templates)
+- [ ] Back-end (Models, Views, Templates)
   - [x] Create models for table Project and Link and register it in admin.py
+  - [ ] Set LANGUAGE_CODE to en-gb and TIME_ZONE to Europe/London in settings.py
+  - [ ] Create urls.py in website directory and hook up url mapper so that it still works
+  - [ ] Define and create URL structure
+  - [ ] Use decorators (class orientation) to register models in admin.py
+  - [ ] Create base views (functions) - redirecting
+  - [ ] Create templates for each page (inc. navbar and footbar partials, base and image upload templates)
+    - [ ] File structure
+    - [ ] HTML boiler template
+    - [ ] Referencing using Django templating language
+  - [ ] Test integration and correct for potential errors
+  - [ ] Create 2 or 3 dummy projects
+  - [ ] Customise index view to return project list
+  - [ ] Customise index page to display project list
+  - [ ] Create Hire and Contact forms
+  - [ ] Customise views to process interaction with forms (development mode, data shall be outputted to the console)
+  - [ ] Customise templates to display forms
+  - [ ] Customise image upload view to allow access only for super user
+  - [ ] Edit admin.py to access image upload page from the admin page
+  - [ ] Customise project view to return details about a particular project
+  - [ ] Customise project template to display the project details
+  - [ ] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future)
+- [ ] Tests
+  - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
+  - [ ] Tests for models
+  - [ ] Tests for views
+  - [ ] Tests for forms
+- [ ] Front-end (HTML, CSS, JS; Bulma, Sass)
+  - [ ] Read how to use Bulma
+  - [ ] Read how to use Sass
+  - [ ] Structure templates using Bulma
+  - [ ] Define colours, fonts and sizes
+  - [ ] Apply minor changes to a template and test if it works
+  - [ ] Export assets from the .xd file
+  - [ ] Create profiles on social media to get links
+  - [ ] Front-end of the Index page (with dummy text)
+    - [ ] Ensure it displays appropriate message when the project section is empty
+    - [ ] Create a mobile version
+  - [ ] Customise navbar and footbar partials
+    - [ ] Create a mobile version
+  - [ ] Front-end of the Project page (with dummy text)
+    - [ ] Create a mobile version
+  - [ ] Front-end of the Hire Me page (with dummy text)
+    - [ ] Create a mobile version
+  - [ ] Front-end of the Upload page
+  - [ ] Create copy (text content of the website, not including projects)
+- [ ] Deployment
+  - [ ] Ensure server/cloud allows for using Docker
+  - [ ] Ensure you have a domain
+  - [ ] Deploy files to the server
+  - [ ] Get SSL certificate
+  - [ ] Test the website for public access from multiple devices though https protocol
 
 ## Stack:
  - Docker

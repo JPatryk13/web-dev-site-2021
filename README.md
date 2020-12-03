@@ -37,7 +37,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Update urls.py so it allows for accessing the view and serves media files in development
 - [ ] Back-end (Models, Views, Templates)
   - [x] Create models for table Project and Link and register it in admin.py
-  - [ ] Set LANGUAGE_CODE to en-gb and TIME_ZONE to Europe/London in settings.py
+  - [x] Set LANGUAGE_CODE to en-gb and TIME_ZONE to Europe/London in settings.py
   - [ ] Create urls.py in website directory and hook up url mapper so that it still works
   - [ ] Define and create URL structure
   - [ ] Use decorators (class orientation) to register models in admin.py
@@ -969,6 +969,35 @@ $ docker logs <CONTAINER ID>
 $ docker-compose down -v
 $ sudo docker-compose -f docker-compose.prod.yml up -d --build
 ```
+
+#### Back-end (Models, Views, Templates) (Part 3).
+1. Changed *CharField* for *status* to *BooleanField* for *public* in *website/models.py*
+2. Customised *LANGUAGE_CODE* and *TIME_ZONE* in *settings.py*
+3. Customised *webdevsite/urls.py* so it maps to *website/urls.py*
+```
+from django.contrib import admin
+from django.urls import path
+from django.conf import settings
+from django.conf.urls.static import static
+
+urlpatterns = [
+    path('/', include('website.urls')),
+    path('admin/', admin.site.urls),
+]
+...
+```
+4. Created *website/urls.py*
+```
+from django.urls import path
+
+urlpatterns = [
+    path('', views.index, name='index'),
+    path('/project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail'),
+    path('/hire-me/', views.hire_me, name='hire-me'),
+    path('/upload-image/', views.upload_image, name='upload-image'),
+]
+```
+
 
 
 ## Errors

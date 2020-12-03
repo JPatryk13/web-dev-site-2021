@@ -18,11 +18,8 @@ from django.urls import path
 from django.conf import settings
 from django.conf.urls.static import static
 
-from website.views import image_upload
-
 urlpatterns = [
-    # Temporary direct url to the upload view in the website app
-    path("", image_upload, name="upload"),
+    path('/', include('website.urls')),
     path('admin/', admin.site.urls),
 ]
 

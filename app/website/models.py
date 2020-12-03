@@ -6,12 +6,12 @@ class Project(models.Model):
     title = models.CharField(
         max_length=100,
         verbose_name='Project title.',
-        help_text='Max: 100 chars.'
+        help_text='Max: 200 chars.'
     )
     prev_description = models.TextField(
         max_length=200,
         verbose_name='Short description.',
-        help_text='Max: 200 chars.'
+        help_text='Max: 500 chars.'
     )
     description = models.TextField(
         max_length=100000,
@@ -24,19 +24,7 @@ class Project(models.Model):
 
     img = models.URLField(max_length=1000)
 
-    # When status set to 'e', the project post won't be public
-    STATUS = (
-        ('e', 'Edit'),
-        ('p', 'Public'),
-    )
-
-    status = models.CharField(
-        max_length=1,
-        choices=STATUS,
-        blank=True,
-        default='e',
-        help_text='Status of the post.'
-    )
+    public = models.BooleanField(default=False, help_text='Check the False if you want the project to be private.')
 
     def __str__(self):
         return self.title

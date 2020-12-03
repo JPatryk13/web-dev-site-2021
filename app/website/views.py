@@ -2,14 +2,26 @@
 
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
+from django.views import generic
+
+def index(request):
+    return render(request, 'index.html')
+
+
+class ProjectDetailView(generic.DetailView):
+    template_name = 'project-detail.html'
+
+
+def hire_me(request):
+    return render(request, 'hire-me.html')
 
 
 def image_upload(request):
     # If the page was previously open and the image is being uploaded the code beneath
     # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
-    if request.method == "POST" and request.FILES["image_file"]:
+    if request.method == 'POST' and request.FILES['image_file']:
         # If the method in the request was POST get the image that is to be uploaded
-        image_file = request.FILES["image_file"]
+        image_file = request.FILES['image_file']
 
         # https://docs.djangoproject.com/en/3.1/ref/files/storage/#the-filesystemstorage-class
         fs = FileSystemStorage()
@@ -19,8 +31,8 @@ def image_upload(request):
         print(image_url)
 
         # Save the image at the generated url
-        return render(request, "upload.html", {
-            "image_url": image_url
+        return render(request, 'upload.html', {
+            'image_url': image_url
         })
     # Else: display the upload page
-    return render(request, "upload.html")
+    return render(request, 'upload.html')

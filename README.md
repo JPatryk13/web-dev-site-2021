@@ -41,12 +41,12 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Create urls.py in website directory and hook up url mapper so that it still works
   - [x] Define and create URL structure
   - [x] Use decorators (class orientation) to register models in admin.py
-  - [ ] Create base views (functions/classes) - redirecting
-  - [ ] Create templates for each page (inc. navbar and footbar partials, base and image upload templates)
-    - [ ] File structure
-    - [ ] HTML boiler template
-    - [ ] Referencing using Django templating language
-  - [ ] Test integration and correct for potential errors
+  - [x] Create base views (functions/classes) - redirecting
+  - [x] Create templates for each page (inc. navbar and footbar partials, base and image upload templates)
+    - [x] File structure
+    - [x] HTML boiler template
+    - [x] Referencing using Django templating language
+  - [x] Test integration and correct for potential errors
   - [ ] Create 2 or 3 dummy projects
   - [ ] Customise index view to return project list
   - [ ] Customise index page to display project list
@@ -976,12 +976,12 @@ $ sudo docker-compose -f docker-compose.prod.yml up -d --build
 3. Customised *webdevsite/urls.py* so it maps to *website/urls.py*
 ```
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('/', include('website.urls')),
+    path('', include('website.urls')),
     path('admin/', admin.site.urls),
 ]
 ...
@@ -989,12 +989,13 @@ urlpatterns = [
 4. Created *website/urls.py*
 ```
 from django.urls import path
+from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
-    path('/project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail'),
-    path('/hire-me/', views.hire_me, name='hire-me'),
-    path('/upload-image/', views.upload_image, name='upload-image'),
+    path('project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail'),
+    path('hire-me/', views.hire_me, name='hire-me'),
+    path('image-upload/', views.image_upload, name='image-upload'),
 ]
 ```
 5. Re-register models in *admin.py* using decorators
@@ -1008,7 +1009,39 @@ class ProjectAdmin(admin.ModelAdmin):
 class LinkAdmin(admin.ModelAdmin):
     pass
 ```
-6.
+6. Create plane views
+```
+...
+from django.views import generic
+
+def index(request):
+    return render(request, 'index.html')
+
+
+class ProjectDetailView(generic.DetailView):
+    template_name = 'project-detail.html'
+
+
+def hire_me(request):
+    return render(request, 'hire-me.html')
+...
+```
+7. Create templates
+```
+.
+├── base.html
+├── hire-me.html
+├── index.html
+├── partials
+│   ├── footbar.html
+│   └── navbar.html
+├── project-detail.html
+└── upload.html
+```
+8. In files *hire-me*, *index* added words indicating name of the file. E.g. I put `hire-me` in *hire-me.html* file.
+9. Run container and go to `localhost:8000` and `localhost:8000/hire-me`
+10. Create base template and add some text to it as well as to the *footbar* and *navbar* files.
+11. Go to `localhost:8000` and `localhost:8000/hire-me` again to test.
 
 
 

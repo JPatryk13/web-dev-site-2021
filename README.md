@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.00**
+**PLAN 1.02**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -47,15 +47,20 @@ Web development services entrepreneurship website. Using: **Docker** via running
     - [x] HTML boiler template
     - [x] Referencing using Django templating language
   - [x] Test integration and correct for potential errors
-  - [ ] Create 2 or 3 dummy projects
-  - [ ] Customise index view to return project list
-  - [ ] Customise index page to display project list
+  - [x] Create 2 or 3 dummy projects
+  - [x] Customise index view to return project list
+  - [x] Customise index page to display project list
   - [ ] Create Hire and Contact forms
   - [ ] Customise views to process interaction with forms (development mode, data shall be outputted to the console)
+    - [ ] Index view - display form and the list of projects
+    - [ ] Hire me view - display form
+  - [ ] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
   - [ ] Customise templates to display forms
   - [ ] Customise image upload view to allow access only for super user
   - [ ] Edit admin.py to access image upload page from the admin page
   - [ ] Customise project view to return details about a particular project
+    - [x] Just project details
+    - [ ] Project details with links
   - [ ] Customise project template to display the project details
   - [ ] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future)
 - [ ] Tests
@@ -878,7 +883,7 @@ from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 
 
-def image_upload(request):
+def upload(request):
     # If the page was previously open and the image is being uploaded the code beneath
     # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
     if request.method == "POST" and request.FILES["image_file"]:
@@ -992,10 +997,10 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.index, name='index'),
+    path('', views.Index.as_view(), name='index'),
     path('project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail'),
     path('hire-me/', views.hire_me, name='hire-me'),
-    path('image-upload/', views.image_upload, name='image-upload'),
+    path('upload/', views.upload, name='upload'),
 ]
 ```
 5. Re-register models in *admin.py* using decorators
@@ -1014,12 +1019,14 @@ class LinkAdmin(admin.ModelAdmin):
 ...
 from django.views import generic
 
-def index(request):
-    return render(request, 'index.html')
+class Index(generic.ListView):
+    model = Project
+    context_object_name = 'project_list'
+    template_name = 'index.html'
 
 
 class ProjectDetailView(generic.DetailView):
-    template_name = 'project-detail.html'
+    model = Project
 
 
 def hire_me(request):
@@ -1039,9 +1046,77 @@ def hire_me(request):
 └── upload.html
 ```
 8. In files *hire-me*, *index* added words indicating name of the file. E.g. I put `hire-me` in *hire-me.html* file.
-9. Run container and go to `localhost:8000` and `localhost:8000/hire-me`
+9. Run container and go to *localhost:8000* and *localhost:8000/hire-me*
 10. Create base template and add some text to it as well as to the *footbar* and *navbar* files.
-11. Go to `localhost:8000` and `localhost:8000/hire-me` again to test.
+11. Go to *localhost:8000* and *localhost:8000/hire-me* again to test.
+12. Get a base HTML template, upload put it in *base.html* and reference `navbar`, `content`, `footbar` blocks using Django templating language
+```
+...
+<body>
+  {% block navbar %}{% include "partials/navbar.html" %}{% endblock %}
+
+  template
+
+  {% block content %}that part should be replaced{% endblock %}
+
+  {% block footbar %}{% include "partials/footbar.html" %}{% endblock %}
+</body>
+...
+```
+13. Build a code in *index.html* that displays list of the projects
+```
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Projects</h1>
+  {% if project_list %}
+  <ul>
+    {% for project in project_list %}
+      <li>
+        <img src="{{ project.img }}" alt="{{ project.title }}" width="10%" height="10%">
+        <a href="{{ project.get_absolute_url }}">{{ project.title }}</a> {{ project.date_finished }}
+        <p>
+          {{ project.prev_description }}
+        </p>
+      </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+    <p>There is no projects that has been finished.</p>
+  {% endif %}
+{% endblock %}
+```
+14. Add a date-time field and ordering Meta in the models file
+```
+...
+date_finished = models.DateTimeField(
+      verbose_name='Date.',
+      help_text='When the project has been finished.'
+  )
+...
+  class Meta:
+      ordering = ['date_finished']
+...
+```
+15. Spin up containers if they are not up, go to *localhost:8000/upload* and upload two arbitrary images (copy links, we will need them)
+16. Go to *localhost:8000/admin* and add two dummy projects - use copied links to reference images
+17. Two changes to be made; `verbose_name` in `date_finished` to `Date finished.` and `help_text` in `public` to `Check if you want the project to be public.`. Also change `DateTimeField` type for `date_finished` to `DateField` + **Error #10**
+```
+...
+date_finished = models.DateField(
+      default=None,
+      null=True,
+      verbose_name='Date finished.',
+      help_text='When the project has been finished.'
+  )
+...
+public = models.BooleanField(default=False, help_text='Check if you want the project to be public.')
+...
+```
+18. As soon as projects are successfully added go to the main page to verify if the projects are listed properly
+
+
+
 
 
 
@@ -1239,4 +1314,41 @@ webdevsite_nginx    latest              b750759402de        2020-11-20 14:22:54 
 <none>              <none>              e6efbf56ba2e        2020-11-20 14:22:09 +0000 GMT   571MB
 ...
 $ docker image prune -a --force --filter "until=2020-11-20T14:22:53"
+```
+10. Failed to migrate database after changes
+After filling up the form to create a entry in Project table it fails to upload it
+```
+ProgrammingError at /admin/website/project/add/
+column "date_finished" of relation "website_project" does not exist
+LINE 1: ...ect" ("title", "prev_description", "description", "date_fini...
+                                                             ^
+```
+* Run `$ docker ps` and `$ docker logs <web container ID>`
+```
+Waiting for postgres...
+PostgreSQL started
+Operations to perform:
+  Apply all migrations: admin, auth, contenttypes, sessions, website
+Running migrations:
+  No migrations to apply.
+  Your models have changes that are not yet reflected in a migration, and so won't be applied.
+  Run 'manage.py makemigrations' to make new migrations, and then re-run 'manage.py migrate' to apply them.
+```
+* Run `$ docker-compose exec web python manage.py makemigrations`
+```
+You are trying to add a non-nullable field 'date_finished' to project without a default; we can't do that (the database needs something to populate existing rows).
+Please select a fix:
+ 1) Provide a one-off default now (will be set on all existing rows with a null value for this column)
+ 2) Quit, and let me add a default in models.py
+Select an option:
+```
+* Seems like I forgot about the fact that new columns must contain a case to serve for existing rows, i.e. default option.
+* Edit the Project model
+```
+date_finished = models.DateTimeField(
+      default=None,
+      null=True,
+      verbose_name='Date.',
+      help_text='When the project has been finished.'
+  )
 ```

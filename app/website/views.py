@@ -3,20 +3,23 @@
 from django.shortcuts import render
 from django.core.files.storage import FileSystemStorage
 from django.views import generic
+from .models import Project
 
-def index(request):
-    return render(request, 'index.html')
+class Index(generic.ListView):
+    model = Project
+    context_object_name = 'project_list'
+    template_name = 'index.html'
 
 
 class ProjectDetailView(generic.DetailView):
-    template_name = 'project-detail.html'
+    model = Project
 
 
 def hire_me(request):
     return render(request, 'hire-me.html')
 
 
-def image_upload(request):
+def upload(request):
     # If the page was previously open and the image is being uploaded the code beneath
     # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
     if request.method == 'POST' and request.FILES['image_file']:

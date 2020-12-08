@@ -19,12 +19,26 @@ class Project(models.Model):
         help_text='Max: 100000 chars. Use HTML to make it look good.'
     )
 
+    date_finished = models.DateField(
+        default=None,
+        null=True,
+        verbose_name='Date finished.',
+        help_text='When the project has been finished.'
+    )
+
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    img = models.URLField(max_length=1000)
+    img = models.URLField(
+        max_length=1000,
+        verbose_name='Image.',
+        help_text='URL to an image that will appear in the home page.'
+    )
 
-    public = models.BooleanField(default=False, help_text='Check the False if you want the project to be private.')
+    public = models.BooleanField(default=False, help_text='Check if you want the project to be public.')
+
+    class Meta:
+        ordering = ['date_finished']
 
     def __str__(self):
         return self.title

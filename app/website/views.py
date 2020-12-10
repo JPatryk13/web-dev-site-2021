@@ -1,22 +1,59 @@
 # https://docs.djangoproject.com/en/3.1/topics/http/views/
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
-from django.views import generic
+from django.views import generic, View
 from .models import Project
+from .forms import HireMeForm, ContactForm
+from django.http import HttpResponse
+from django.views.generic.edit import FormView
+from django.views.generic.base import TemplateView
 
-class Index(generic.ListView):
-    model = Project
-    context_object_name = 'project_list'
+class Index(View):
     template_name = 'index.html'
+
+    project_list = Project.objects.all()
+
+    form_class = ContactForm
+    initial = {'key': 'value'}
+
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        return render(request, self.template_name, { 'form': form, 'project_list': self.project_list })
+
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
+
+        if form.is_valid():
+            form.send_message()
+            return redirect('/contact-success/')
+
+
+
+def contact_success(TemplateView):
+    return HttpResponse('Success! Thank you for your message.')
+
 
 
 class ProjectDetailView(generic.DetailView):
     model = Project
 
 
-def hire_me(request):
-    return render(request, 'hire-me.html')
+
+class HireMe(FormView):
+    template_name = 'hire-me.html'
+    form_class = HireMeForm
+    success_url = '/hire-me-success/'
+
+    def form_valid(self, form_class):
+        form_class.send_message()
+        return super().form_valid(form_class)
+
+
+
+def hire_me_success(TemplateView):
+    return HttpResponse('Success! Thank you for your message.')
+
 
 
 def upload(request):

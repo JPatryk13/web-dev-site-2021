@@ -50,19 +50,19 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Create 2 or 3 dummy projects
   - [x] Customise index view to return project list
   - [x] Customise index page to display project list
-  - [ ] Create Hire and Contact forms
-  - [ ] Customise views to process interaction with forms (development mode, data shall be outputted to the console)
-    - [ ] Index view - display form and the list of projects
-    - [ ] Hire me view - display form
+  - [x] Create Hire and Contact forms
+  - [x] Customise views to process interaction with forms (development mode, data shall be outputted to the console)
+    - [x] Index view - display form and the list of projects
+    - [x] Hire me view - display form
   - [ ] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
-  - [ ] Customise templates to display forms
+  - [x] Customise templates to display forms
   - [ ] Customise image upload view to allow access only for super user
   - [ ] Edit admin.py to access image upload page from the admin page
   - [ ] Customise project view to return details about a particular project
     - [x] Just project details
     - [ ] Project details with links
   - [ ] Customise project template to display the project details
-  - [ ] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future)
+  - [x] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future - Amazon SAS)
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [ ] Tests for models
@@ -1114,6 +1114,14 @@ public = models.BooleanField(default=False, help_text='Check if you want the pro
 ...
 ```
 18. As soon as projects are successfully added go to the main page to verify if the projects are listed properly
+19. Create class-based *forms.py*
+20. Create Views serving forms
+21. Change some functions into classes in *views.py*
+22. Update URLs
+23. Update *settings.py* for email backends
+24. Customise *hire-me.html* and *index.html* templates so they both display forms
+25. Bring back listing projects in the *index.html* template
+
 
 
 

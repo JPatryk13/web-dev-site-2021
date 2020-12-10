@@ -128,3 +128,14 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "/mediafiles/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
+# Emailing service
+# https://learndjango.com/tutorials/django-email-contact-form
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend' if DEBUG else 'django.core.mail.backends.smtp.EmailBackend'
+# DEFAULT_FROM_EMAIL = ...
+# EMAIL_HOST = ... smtp something
+# EMAIL_HOST_USER = ... apikey
+# EMAIL_HOST_PASSWORD = '<sendgrid_password>'
+# EMAIL_PORT = ...
+# EMAIL_USE_TLS = True

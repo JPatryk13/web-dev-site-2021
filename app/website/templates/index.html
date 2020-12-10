@@ -17,4 +17,12 @@
   {% else %}
     <p>There is no projects that has been finished.</p>
   {% endif %}
+
+  <form action="" method="post">
+    {% csrf_token %}
+    <table>
+      {{ form.as_table }}
+    </table>
+    <input type="submit" value="Submit">
+  </form>
 {% endblock %}

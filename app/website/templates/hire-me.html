@@ -1,5 +1,9 @@
 {% extends "base.html" %}
 
 {% block content %}
-hire-me
+<form action="/user_url/" method="post">
+  <label for="user_name">Enter name: </label>
+  <input id="user_name" type="text" name="name_filed" value="Default name for user.">
+  <input type="submit" value="OK">
+</form>
 {% endblock %}

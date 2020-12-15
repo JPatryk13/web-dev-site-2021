@@ -56,7 +56,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
     - [x] Hire me view - display form
   - [x] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
   - [x] Customise templates to display forms
-  - [ ] Customise image upload view to allow access only for super user
+  - [x] Customise image upload view to allow access only for super user
   - [ ] Edit admin.py to access image upload page from the admin page
   - [ ] Customise project view to return details about a particular project
     - [x] Just project details
@@ -1133,6 +1133,12 @@ img = models.URLField(
 )
 ```
 29. Seed database `$ docker-compose exec web python manage.py seed`
+30. Add verification for superuser in the upload view
+```
+# Verify if the user has superuser permissions
+  if not request.user.is_superuser:
+      raise PermissionDenied()
+```
 
 
 

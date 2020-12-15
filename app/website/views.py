@@ -8,6 +8,7 @@ from .forms import HireMeForm, ContactForm
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from django.views.generic.base import TemplateView
+from django.core.exceptions import PermissionDenied
 
 class Index(View):
     template_name = 'index.html'
@@ -57,6 +58,10 @@ def hire_me_success(TemplateView):
 
 
 def upload(request):
+    # Verify if the user has superuser permissions
+    if not request.user.is_superuser:
+        raise PermissionDenied()
+
     # If the page was previously open and the image is being uploaded the code beneath
     # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
     if request.method == 'POST' and request.FILES['image_file']:

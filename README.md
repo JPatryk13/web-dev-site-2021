@@ -54,7 +54,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Customise views to process interaction with forms (development mode, data shall be outputted to the console)
     - [x] Index view - display form and the list of projects
     - [x] Hire me view - display form
-  - [ ] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
+  - [x] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
   - [x] Customise templates to display forms
   - [ ] Customise image upload view to allow access only for super user
   - [ ] Edit admin.py to access image upload page from the admin page
@@ -1121,6 +1121,18 @@ public = models.BooleanField(default=False, help_text='Check if you want the pro
 23. Update *settings.py* for email backends
 24. Customise *hire-me.html* and *index.html* templates so they both display forms
 25. Bring back listing projects in the *index.html* template
+26. Install *faker*; in virtual environment `$ pip install Faker`
+27. Create *seed.py* in *management/commands/*
+28. Add default value for the image url in the Project model
+```
+img = models.URLField(
+    max_length=1000,
+    verbose_name='Image.',
+    help_text='URL to an image that will appear in the home page.',
+    default='https://i.ytimg.com/vi/E9U9xS4thxU/hqdefault.jpg' # temporarily, eases using faker
+)
+```
+29. Seed database `$ docker-compose exec web python manage.py seed`
 
 
 

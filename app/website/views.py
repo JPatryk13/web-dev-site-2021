@@ -38,6 +38,7 @@ def contact_success(TemplateView):
 
 class ProjectDetailView(generic.DetailView):
     model = Project
+    template_name = 'project-detail.html'
 
 
 

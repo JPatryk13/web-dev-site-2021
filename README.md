@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.02**
+**PLAN 1.03**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -57,12 +57,13 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Create a seeder for tables (https://stackoverflow.com/questions/33024510/populate-django-database)
   - [x] Customise templates to display forms
   - [x] Customise image upload view to allow access only for super user
-  - [ ] Edit admin.py to access image upload page from the admin page
-  - [ ] Customise project view to return details about a particular project
+  - [x] Edit admin.py to access image upload page from the admin page
+  - [x] Customise project view to return details about a particular project
     - [x] Just project details
     - [ ] Project details with links
   - [ ] Customise project template to display the project details
   - [x] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future - Amazon SAS)
+  - [ ] Figure out why Faker doesn't install automatically
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [ ] Tests for models
@@ -1139,6 +1140,79 @@ img = models.URLField(
   if not request.user.is_superuser:
       raise PermissionDenied()
 ```
+31. Update settings so they are able to discover custom admin templates
+```
+[59]  'DIRS': [os.path.join(BASE_DIR, "website/templates")],
+```
+33. Go to `/home/patryk/dev/webdevsite/virt/lib/python3.8/site-packages/django/contrib/admin/templates` - django admin templates directory. Display the content:
+```
+.
+├── admin
+│   ├── 404.html
+│   ├── 500.html
+│   ├── actions.html
+│   ├── app_index.html
+│   ├── app_list.html
+│   ├── auth
+│   │   └── user
+│   │       ├── add_form.html
+│   │       └── change_password.html
+│   ├── base.html
+│   ├── base_site.html
+│   ├── change_form.html
+│   ├── change_form_object_tools.html
+│   ├── change_list.html
+│   ├── change_list_object_tools.html
+│   ├── change_list_results.html
+│   ├── date_hierarchy.html
+│   ├── delete_confirmation.html
+│   ├── delete_selected_confirmation.html
+│   ├── edit_inline
+│   │   ├── stacked.html
+│   │   └── tabular.html
+│   ├── filter.html
+│   ├── includes
+│   │   ├── fieldset.html
+│   │   └── object_delete_summary.html
+│   ├── index.html
+│   ├── invalid_setup.html
+│   ├── login.html
+│   ├── nav_sidebar.html
+│   ├── object_history.html
+│   ├── pagination.html
+│   ├── popup_response.html
+│   ├── prepopulated_fields_js.html
+│   ├── search_form.html
+│   ├── submit_line.html
+│   └── widgets
+│       ├── clearable_file_input.html
+│       ├── foreign_key_raw_id.html
+│       ├── many_to_many_raw_id.html
+│       ├── radio.html
+│       ├── related_widget_wrapper.html
+│       ├── split_datetime.html
+│       └── url.html
+└── registration
+    ├── logged_out.html
+    ├── password_change_done.html
+    ├── password_change_form.html
+    ├── password_reset_complete.html
+    ├── password_reset_confirm.html
+    ├── password_reset_done.html
+    ├── password_reset_email.html
+    └── password_reset_form.html
+```
+32. Create a directory structure and a file *templates/admin/app_list.html*
+33. Copy the code from *app_list.html* (in *.../django/contrib/admin/templates/*) to the new created file
+34. Update the code so it includes a link to the upload page
+```
+[37]   {% endfor %}
+[38]    <a href="{% url 'upload' %}">Upload an image.</a>
+[39]  {% else %}
+```
+35. Add `template_name = 'project-detail.html'` in `ProjectDetailView` in *views.py*
+36. Build a basic detail view for the project
+
 
 
 

@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.03**
+**PLAN 1.04**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -64,6 +64,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [ ] Customise project template to display the project details
   - [x] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future - Amazon SAS)
   - [ ] Figure out why Faker doesn't install automatically
+  - [ ] Create Error views and basic templates (https://docs.djangoproject.com/en/3.1/ref/views/)
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [ ] Tests for models
@@ -1212,6 +1213,8 @@ img = models.URLField(
 ```
 35. Add `template_name = 'project-detail.html'` in `ProjectDetailView` in *views.py*
 36. Build a basic detail view for the project
+37. Create and test seeder for the Link table
+38. Customise ProjectDetailView so it return both a project and a list of Links related to it
 
 
 

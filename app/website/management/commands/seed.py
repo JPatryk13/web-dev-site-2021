@@ -1,6 +1,7 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
-from ...models import Project
+from ...models import Project, Link
+import random
 
 
 class Command(BaseCommand):
@@ -32,13 +33,25 @@ def create_project():
     faker = Faker('en_US')
 
     proj = Project(
-        title=faker.sentence(nb_words=5),
-        prev_description=faker.text(max_nb_chars=200),
-        description=faker.text(max_nb_chars=500),
-        date_finished=faker.date()
+        title = faker.text(max_nb_chars=200),
+        prev_description = faker.text(max_nb_chars=500),
+        description = faker.text(max_nb_chars=100000),
+        date_finished = faker.date()
+        # Add image_url()
     )
     proj.save()
     return proj
 
 def create_link():
-    return 'link'
+    faker = Faker('en_US')
+
+    project_ids = Project.objects.all().values_list('id', flat=True)
+    # is empty when there in no projects in the list
+
+    lnk = Link(
+        url_name = faker.text(max_nb_chars=200),
+        url = faker.uri(),
+        project = Project.objects.get(pk=random.choice(project_ids))
+    )
+    lnk.save()
+    return lnk

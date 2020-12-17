@@ -3,7 +3,7 @@
 from django.shortcuts import render, redirect
 from django.core.files.storage import FileSystemStorage
 from django.views import generic, View
-from .models import Project
+from .models import Project, Link
 from .forms import HireMeForm, ContactForm
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
@@ -36,9 +36,15 @@ def contact_success(TemplateView):
 
 
 
-class ProjectDetailView(generic.DetailView):
-    model = Project
+class ProjectDetailView(View):
     template_name = 'project-detail.html'
+
+    def get(self, request, *args, **kwargs):
+        context = {
+            'project': Project.objects.get(pk=self.kwargs['pk']),
+            'links': Link.objects.filter(project_id=self.kwargs['pk'])
+        }
+        return render(request, self.template_name, context)
 
 
 

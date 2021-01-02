@@ -1,9 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-  {{ links }}
-
   <h1>Title: {{ project.title }}</h1>
+  {{ project.date_finished }}
 
   <p>{{ project.description }}</p>
+
+  {% if links %}
+  <ul>
+    {% for link in links %}
+      <li>
+        <a href="{{ link.url }}">{{ link.url_name }}</a>
+      </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
 {% endblock %}

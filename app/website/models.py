@@ -4,9 +4,9 @@ from django.urls import reverse
 
 class Project(models.Model):
     title = models.CharField(
-        max_length=200,
+        max_length=100,
         verbose_name='Project title.',
-        help_text='Max: 200 chars.'
+        help_text='Max: 100 chars.'
     )
     prev_description = models.TextField(
         max_length=500,
@@ -14,9 +14,9 @@ class Project(models.Model):
         help_text='Max: 500 chars.'
     )
     description = models.TextField(
-        max_length=100000,
+        max_length=5000,
         verbose_name='Description.',
-        help_text='Max: 100000 chars. Use HTML to make it look good.'
+        help_text='Max: 5000 chars. Use HTML to make it look good.'
     )
 
     date_finished = models.DateField(
@@ -32,8 +32,7 @@ class Project(models.Model):
     img = models.URLField(
         max_length=1000,
         verbose_name='Image.',
-        help_text='URL to an image that will appear in the home page.',
-        default='https://i.ytimg.com/vi/E9U9xS4thxU/hqdefault.jpg' # temporarily, eases using faker
+        help_text='URL to an image that will appear in the home page.'
     )
 
     public = models.BooleanField(default=False, help_text='Check if you want the project to be public.')

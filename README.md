@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.04**
+**PLAN 1.06**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -35,7 +35,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Create a view that serves for saving media files
   - [x] Create a template that allows for saving images
   - [x] Update urls.py so it allows for accessing the view and serves media files in development
-- [ ] Back-end (Models, Views, Templates)
+- [x] Back-end (Models, Views, Templates)
   - [x] Create models for table Project and Link and register it in admin.py
   - [x] Set LANGUAGE_CODE to en-gb and TIME_ZONE to Europe/London in settings.py
   - [x] Create urls.py in website directory and hook up url mapper so that it still works
@@ -60,19 +60,26 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Edit admin.py to access image upload page from the admin page
   - [x] Customise project view to return details about a particular project
     - [x] Just project details
-    - [ ] Project details with links
-  - [ ] Customise project template to display the project details
+    - [x] Project details with links
+  - [x] Customise project template to display the project details
   - [x] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future - Amazon SAS)
-  - [ ] Figure out why Faker doesn't install automatically
-  - [ ] Create Error views and basic templates (https://docs.djangoproject.com/en/3.1/ref/views/)
+  - [x] Figure out why Faker doesn't install automatically
+- [ ] Back-end (production environment locally, manual test)
+  - [ ] Test URL mapping
+  - [ ] Add auto-creating superuser
+  - [ ] Add automatic seeding database
+  - [ ] Test admin page
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [ ] Tests for models
   - [ ] Tests for views
   - [ ] Tests for forms
 - [ ] Front-end (HTML, CSS, JS; Bulma, Sass)
-  - [ ] Read how to use Bulma
+  - [x] Read how to use Bulma
   - [ ] Read how to use Sass
+  - [ ] Rebuild current templates using Bulma (no need for assets from the design)
+  - [ ] Test how to make assets move (JS exercise)
+  - [ ] Get assets
   - [ ] Structure templates using Bulma
   - [ ] Define colours, fonts and sizes
   - [ ] Apply minor changes to a template and test if it works
@@ -95,6 +102,8 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [ ] Deploy files to the server
   - [ ] Get SSL certificate
   - [ ] Test the website for public access from multiple devices through https protocol
+- [ ] Extra
+  - [ ] Create Error views and basic templates (https://docs.djangoproject.com/en/3.1/ref/views/)
 
 ## Stack:
  - Docker
@@ -1216,6 +1225,7 @@ img = models.URLField(
 37. Create and test seeder for the Link table
 38. Customise ProjectDetailView so it return both a project and a list of Links related to it
 
+## **Done with the step-by-step guide. Updated only in the case of significant changes and errors.**
 
 
 

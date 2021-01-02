@@ -11,9 +11,18 @@ then
     echo "PostgreSQL started"
 fi
 
+# Empty tables in database
 python manage.py flush --no-input
+
+# Migrate
 python manage.py makemigrations --noinput
 python manage.py migrate
+
+# Seed database with fake data
+python manage.py seed --table Project --entries 4
+python manage.py seed --table Link --entries 18
+
+# Create superuser and collect static files
 python manage.py createsu
 python manage.py collectstatic --noinput
 

@@ -33,11 +33,11 @@ def create_project():
     faker = Faker('en_US')
 
     proj = Project(
-        title = faker.text(max_nb_chars=200),
+        title = faker.text(max_nb_chars=100),
         prev_description = faker.text(max_nb_chars=500),
-        description = faker.text(max_nb_chars=100000),
-        date_finished = faker.date()
-        # Add image_url()
+        description = faker.text(max_nb_chars=2000),
+        date_finished = faker.date(),
+        img = faker.image_url()
     )
     proj.save()
     return proj

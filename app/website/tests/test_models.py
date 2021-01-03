@@ -6,16 +6,15 @@ import random
 # Models test
 class ProjectTest(TestCase):
 
-    faker = Faker('en_US')
-
     def create_project(self):
-    # Return a project instance
+        faker = Faker('en_US')
+        # Return a project instance
         return Project.objects.create(
-            title=self.faker.text(max_nb_chars=100),
-            prev_description=self.faker.text(max_nb_chars=500),
-            description=self.faker.text(max_nb_chars=2000),
-            date_finished=self.faker.date(),
-            img=self.faker.image_url(),
+            title=faker.text(max_nb_chars=100),
+            prev_description=faker.text(max_nb_chars=500),
+            description=faker.text(max_nb_chars=2000),
+            date_finished=faker.date(),
+            img=faker.image_url(),
             public=True
         )
 
@@ -36,22 +35,21 @@ class ProjectTest(TestCase):
 
 class LinkTest(TestCase):
 
-    faker = Faker('en_US')
-
     def create_link(self):
+        faker = Faker('en_US')
         # Create test project for the link to be associated with
         proj = Project.objects.create(
-            title=self.faker.text(max_nb_chars=100),
-            prev_description=self.faker.text(max_nb_chars=500),
-            description=self.faker.text(max_nb_chars=2000),
-            date_finished=self.faker.date(),
-            img=self.faker.image_url(),
+            title=faker.text(max_nb_chars=100),
+            prev_description=faker.text(max_nb_chars=500),
+            description=faker.text(max_nb_chars=2000),
+            date_finished=faker.date(),
+            img=faker.image_url(),
             public=True
         )
         # Return a link instance
         return Link.objects.create(
-            url_name=self.faker.text(max_nb_chars=200),
-            url=self.faker.uri(),
+            url_name=faker.text(max_nb_chars=200),
+            url=faker.uri(),
             project=Project.objects.get(pk=proj.id)
         )
 

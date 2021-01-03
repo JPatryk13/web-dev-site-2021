@@ -71,7 +71,7 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Test admin page
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
-  - [ ] Tests for models
+  - [x] Tests for models
   - [ ] Tests for views
   - [ ] Tests for forms
   - [ ] Tests for templates

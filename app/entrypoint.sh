@@ -26,4 +26,8 @@ python manage.py seed --table Link --entries 18
 python manage.py createsu
 python manage.py collectstatic --noinput
 
+# Run test coverage reporting
+coverage run manage.py test -v 2
+coverage html
+
 exec "$@"

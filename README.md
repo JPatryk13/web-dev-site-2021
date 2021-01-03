@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.06**
+**PLAN 1.07**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -64,16 +64,17 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Customise project template to display the project details
   - [x] Find a way of sending emails from your website to your email (no need to apply currently, save it as a reference for the future - Amazon SAS)
   - [x] Figure out why Faker doesn't install automatically
-- [ ] Back-end (production environment locally, manual test)
-  - [ ] Test URL mapping
-  - [ ] Add auto-creating superuser
-  - [ ] Add automatic seeding database
-  - [ ] Test admin page
+- [x] Back-end (production environment locally, manual test)
+  - [x] Test URL mapping
+  - [x] Add auto-creating superuser
+  - [x] Add automatic seeding database
+  - [x] Test admin page
 - [ ] Tests
   - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [ ] Tests for models
   - [ ] Tests for views
   - [ ] Tests for forms
+  - [ ] Tests for templates
 - [ ] Front-end (HTML, CSS, JS; Bulma, Sass)
   - [x] Read how to use Bulma
   - [ ] Read how to use Sass

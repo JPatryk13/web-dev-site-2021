@@ -1,4 +1,5 @@
 asgiref==3.2.10
+coverage==5.3.1
 Django==3.1.2
 Faker==5.0.1
 gunicorn==20.0.4

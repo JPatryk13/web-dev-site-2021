@@ -27,7 +27,8 @@ python manage.py createsu
 python manage.py collectstatic --noinput
 
 # Run initial test coverage reporting. Later execute:
-# docker-compose exec web coverage run manage.py test -v 2
+#   $ docker-compose exec web coverage run manage.py test -v 2
+#   $ docker-compose exec web coverage html
 coverage run manage.py test -v 2
 coverage html
 

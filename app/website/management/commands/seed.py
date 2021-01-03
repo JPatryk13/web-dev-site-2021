@@ -8,14 +8,18 @@ class Command(BaseCommand):
     help = 'Seeding (populating) tables.'
 
     def add_arguments(self, parser):
-        parser.add_argument('--entries',
+        parser.add_argument(
+            '--entries',
             default=5,
             type=int,
-            help='The number of fake entries to create.')
-        parser.add_argument('--table',
+            help='The number of fake entries to create.'
+        )
+        parser.add_argument(
+            '--table',
             default='Project',
             type=str,
-            help='Model which table is to be populated (e.g. Project, Link)')
+            help='Model which table is to be populated (e.g. Project, Link)'
+        )
 
     def handle(self, *args, **options):
         if options['table'] == 'Project':
@@ -33,14 +37,15 @@ def create_project():
     faker = Faker('en_US')
 
     proj = Project(
-        title = faker.text(max_nb_chars=100),
-        prev_description = faker.text(max_nb_chars=500),
-        description = faker.text(max_nb_chars=2000),
-        date_finished = faker.date(),
-        img = faker.image_url()
+        title=faker.text(max_nb_chars=100),
+        prev_description=faker.text(max_nb_chars=500),
+        description=faker.text(max_nb_chars=2000),
+        date_finished=faker.date(),
+        img=faker.image_url()
     )
     proj.save()
     return proj
+
 
 def create_link():
     faker = Faker('en_US')
@@ -49,9 +54,9 @@ def create_link():
     # is empty when there in no projects in the list
 
     lnk = Link(
-        url_name = faker.text(max_nb_chars=200),
-        url = faker.uri(),
-        project = Project.objects.get(pk=random.choice(project_ids))
+        url_name=faker.text(max_nb_chars=200),
+        url=faker.uri(),
+        project=Project.objects.get(pk=random.choice(project_ids))
     )
     lnk.save()
     return lnk

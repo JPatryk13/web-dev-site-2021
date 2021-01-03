@@ -27,7 +27,7 @@ class HireMeForm(forms.Form):
     description = forms.CharField(help_text='Tell me something about your project')
 
     def send_message(self):
-        name = self.cleaned_data['name']
+        # name = self.cleaned_data['name']
         email = self.cleaned_data['email']
         project_type = self.cleaned_data['project_type']
         project_status = self.cleaned_data['project_status']
@@ -35,7 +35,7 @@ class HireMeForm(forms.Form):
 
         message = 'Project type: ' + project_type + '\n' + 'Project status: ' + project_status + '\n' + description
 
-        send_mail('Hire Me, ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), message, email, [ os.environ['SU_EMAIL'] ])
+        send_mail('Hire Me, ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), message, email, [os.environ['SU_EMAIL']])
 
 
 class ContactForm(forms.Form):
@@ -47,4 +47,4 @@ class ContactForm(forms.Form):
     message = forms.CharField(help_text='Message')
 
     def send_message(self):
-        send_mail(self.cleaned_data['name'] + ' ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), self.cleaned_data['message'], self.cleaned_data['email'], [ os.environ['SU_EMAIL'] ])
+        send_mail(self.cleaned_data['name'] + ' ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), self.cleaned_data['message'], self.cleaned_data['email'], [os.environ['SU_EMAIL']])

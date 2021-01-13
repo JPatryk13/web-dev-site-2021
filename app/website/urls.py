@@ -7,5 +7,5 @@ urlpatterns = [
     path('project/<int:pk>', views.ProjectDetailView.as_view(), name='project-detail'),
     path('hire-me/', views.HireMe.as_view(), name='hire-me'),
     path('hire-me-success/', views.hire_me_success, name='hire-me-success'),
-    path('upload/', views.upload, name='upload'),
+    path('upload/', views.Upload.as_view(), name='upload'),
 ]

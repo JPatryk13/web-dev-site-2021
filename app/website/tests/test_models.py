@@ -1,6 +1,6 @@
 from django.test import TestCase
 from faker import Faker
-from website.models import Project, Link
+from website.models import Project, Link, Image
 from .mixins.ModelTestMixin import ModelTestMixin
 
 # Models test
@@ -28,3 +28,13 @@ class LinkTest(TestCase, ModelTestMixin):
     def test_str(self):
         # Test if the __str__ function returns link.url_name
         self.assertEqual(self.link.__str__(), self.link.url_name)
+
+class ImageTest(TestCase, ModelTestMixin):
+
+    def setUp(self):
+        # Create an instance of Image class
+        self.img = self.create_image()
+
+    def test_str(self):
+        # Test if the __str__ function returns img.img_name
+        self.assertEqual(self.img.__str__(), self.img.img_name)

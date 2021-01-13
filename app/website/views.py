@@ -1,10 +1,9 @@
 # https://docs.djangoproject.com/en/3.1/topics/http/views/
 
 from django.shortcuts import render, redirect
-from django.core.files.storage import FileSystemStorage
 from django.views import generic, View
-from .models import Project, Link
-from .forms import HireMeForm, ContactForm
+from .models import Project, Link, Image
+from .forms import HireMeForm, ContactForm, UploadImageForm
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
@@ -26,6 +25,7 @@ class Index(View):
     # when there is an interaction performed on the QuerySet, i.e. passing it to
     # the context
     project_list = Project.objects.all()
+    image_list = Image.objects.all()
 
     form_class = ContactForm
     initial = {'key': 'value'}
@@ -36,13 +36,16 @@ class Index(View):
 
         # return HttpResponse(self.project_list) # Test line to return pure QuerySet
         form = self.form_class(initial=self.initial)
-        context = {'form': form, 'project_list': self.project_list}
+        context = {
+            'form': form,
+            'project_list': self.project_list,
+            'image_list': self.image_list
+        }
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         # The function validates the data passed to the form and returns success
         # message if appropriate
-
         form = self.form_class(request.POST)
 
         if form.is_valid():
@@ -106,27 +109,50 @@ def hire_me_success():
     return HttpResponse('Success! Thank you for your message.')
 
 
-def upload(request):
-    # Verify if the user has superuser permissions
-    if not request.user.is_superuser:
-        raise PermissionDenied()
+class Upload(View):
+    """
+    template_name - html file name (string) to be rendered,
+    form_class - object of the ContactForm class,
+    initial - dictionary to structurise the label-input pairs of the form (?)
 
-    # If the page was previously open and the image is being uploaded the code beneath
-    # if is executed. Else, only the return render() and the very end is executed; i.e. empty page is loaded.
-    if request.method == 'POST' and request.FILES['image_file']:
-        # If the method in the request was POST get the image that is to be uploaded
+    Custom upload view. Checks if the superuser permission is granted
+    (check_permission), then returns empty form with only one field - image name
+    - the upload field is covered by the template. When both are correctly
+    entered by superuser, the view extracts image file from the request and the
+    form handles the image name. Then the form saves the file's url with given
+    name in database and returns those pieces of information to the upload view.
+    """
+
+    template_name = 'upload.html'
+    form_class = UploadImageForm
+    initial = {'key': 'value'}
+
+    def check_permission(self, request):
+        # Verify if the user has superuser permissions
+        if not request.user.is_superuser:
+            raise PermissionDenied()
+
+    def get(self, request, *args, **kwargs):
+        self.check_permission(request)
+
+        # Get the empty form
+        form = self.form_class(initial=self.initial)
+        context = {'form': form}
+
+        # Render the empty form to the upload template
+        return render(request, self.template_name, context)
+
+    def post(self, request, *args, **kwargs):
+        self.check_permission(request)
+
+        # Retrieve image file from request
         image_file = request.FILES['image_file']
 
-        # https://docs.djangoproject.com/en/3.1/ref/files/storage/#the-filesystemstorage-class
-        fs = FileSystemStorage()
-        # Get the image url (where it is going to be saved) and print it
-        filename = fs.save(image_file.name, image_file)
-        image_url = fs.url(filename)
-        print(image_url)
+        # Get the image name from the form input
+        form = self.form_class(request.POST)
 
-        # Save the image at the generated url
-        return render(request, 'upload.html', {
-            'image_url': image_url
-        })
-    # Else: display the upload page
-    return render(request, 'upload.html')
+        if form.is_valid():
+            # Upload image and get the context (image name, url)
+            context = form.upload_image(image_file)
+            # Render context to the upload template
+            return render(request, self.template_name, context)

@@ -29,12 +29,7 @@ class Project(models.Model):
     added_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    img = models.OneToOneField(
-        'Image',
-        on_delete=models.SET_NULL,
-        blank=True,
-        null=True
-    )
+    img = models.ImageField(upload_to='projects/')
 
     public = models.BooleanField(default=False, help_text='Check if you want the project to be public.')
 
@@ -60,15 +55,3 @@ class Link(models.Model):
 
     def __str__(self):
         return self.url_name
-
-class Image(models.Model):
-    # URL to the image
-    url =  models.URLField(max_length=1000)
-    # Name of the image
-    img_name = models.CharField(
-        max_length=200,
-        help_text='Max: 200 chars.'
-    )
-
-    def __str__(self):
-        return self.img_name

@@ -8,15 +8,13 @@ class ModelTestMixin(object):
     faker = Faker('en_US')
 
     def create_project(self):
-        # Create image for the project to be associated with
-        img = self.create_image()
         # Return a project instance
         return Project.objects.create(
             title=self.faker.text(max_nb_chars=100),
             prev_description=self.faker.text(max_nb_chars=500),
             description=self.faker.text(max_nb_chars=2000),
             date_finished=self.faker.date(),
-            img_id=img.id,
+            img=self.faker.image_url(),
             public=True
         )
 
@@ -28,11 +26,4 @@ class ModelTestMixin(object):
             url_name=self.faker.text(max_nb_chars=200),
             url=self.faker.uri(),
             project=Project.objects.get(pk=proj.pk)
-        )
-
-    def create_image(self):
-        # Return an image instance
-        return Image.objects.create(
-            url=self.faker.image_url(),
-            img_name=self.faker.text(max_nb_chars=200)
         )

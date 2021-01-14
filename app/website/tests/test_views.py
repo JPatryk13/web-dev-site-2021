@@ -1,8 +1,10 @@
 from django.test import TestCase
+from django.contrib.auth import get_user_model
 from .mixins.ViewTestMixin import ViewTestMixin
 from .mixins.ModelTestMixin import ModelTestMixin
 import random
 from faker import Faker
+import os
 
 from website import views
 
@@ -56,15 +58,3 @@ class HireMeTest(TestCase, ViewTestMixin):
                 'description': self.faker.text(max_nb_chars=500)
             }
         )
-
-
-class UploadTest(TestCase):
-
-    def test_anonymous_user(self):
-        pass
-
-    def test_get_request(self):
-        pass
-
-    def test_post_request(self):
-        pass

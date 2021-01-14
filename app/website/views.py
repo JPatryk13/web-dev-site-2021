@@ -25,7 +25,6 @@ class Index(View):
     # when there is an interaction performed on the QuerySet, i.e. passing it to
     # the context
     project_list = Project.objects.all()
-    image_list = Image.objects.all()
 
     form_class = ContactForm
     initial = {'key': 'value'}
@@ -38,8 +37,7 @@ class Index(View):
         form = self.form_class(initial=self.initial)
         context = {
             'form': form,
-            'project_list': self.project_list,
-            'image_list': self.image_list
+            'project_list': self.project_list
         }
         return render(request, self.template_name, context)
 
@@ -107,52 +105,3 @@ def hire_me_success():
     # temporarily it returns a success message when the hire me form is
     # successfully submitted
     return HttpResponse('Success! Thank you for your message.')
-
-
-class Upload(View):
-    """
-    template_name - html file name (string) to be rendered,
-    form_class - object of the ContactForm class,
-    initial - dictionary to structurise the label-input pairs of the form (?)
-
-    Custom upload view. Checks if the superuser permission is granted
-    (check_permission), then returns empty form with only one field - image name
-    - the upload field is covered by the template. When both are correctly
-    entered by superuser, the view extracts image file from the request and the
-    form handles the image name. Then the form saves the file's url with given
-    name in database and returns those pieces of information to the upload view.
-    """
-
-    template_name = 'upload.html'
-    form_class = UploadImageForm
-    initial = {'key': 'value'}
-
-    def check_permission(self, request):
-        # Verify if the user has superuser permissions
-        if not request.user.is_superuser:
-            raise PermissionDenied()
-
-    def get(self, request, *args, **kwargs):
-        self.check_permission(request)
-
-        # Get the empty form
-        form = self.form_class(initial=self.initial)
-        context = {'form': form}
-
-        # Render the empty form to the upload template
-        return render(request, self.template_name, context)
-
-    def post(self, request, *args, **kwargs):
-        self.check_permission(request)
-
-        # Retrieve image file from request
-        image_file = request.FILES['image_file']
-
-        # Get the image name from the form input
-        form = self.form_class(request.POST)
-
-        if form.is_valid():
-            # Upload image and get the context (image name, url)
-            context = form.upload_image(image_file)
-            # Render context to the upload template
-            return render(request, self.template_name, context)

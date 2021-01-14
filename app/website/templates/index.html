@@ -6,11 +6,7 @@
     <ul>
       {% for project in project_list %}
         <li>
-          {% for image in image_list %}
-            {% if project.img_id == image.id %}
-              <img src="{{ image.url }}" alt="{{ image.img_name }}" width="10%" height="10%">
-            {% endif %}
-          {% endfor %}
+          <img src="{{ project.img }}" alt="{{ project.title }}" width="10%" height="10%">
           <a href="{{ project.get_absolute_url }}">{{ project.title }}</a> {{ project.date_finished }}
           <p>
             {{ project.prev_description }}

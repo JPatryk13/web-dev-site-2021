@@ -3,6 +3,7 @@ from django.http import Http404
 from django.test import RequestFactory
 from django.urls import resolve
 from django.urls.exceptions import Resolver404
+from django.core.exceptions import PermissionDenied
 
 # Based on the https://blog.bitlabstudio.com/proper-unit-tests-for-your-django-views-b4a1730a922e
 class ViewTestMixin(object):
@@ -113,3 +114,8 @@ class ViewTestMixin(object):
         """Tests if call raises a 404."""
         with self.assertRaises(Http404):
             self.is_callable(**kwargs)
+
+    def is_forbidden(self, user=None, **kwargs):
+        """Tests if call raises a 403."""
+        with self.assertRaises(PermissionDenied):
+            self.is_callable(user, **kwargs)

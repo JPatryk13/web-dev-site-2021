@@ -50,27 +50,3 @@ class ContactForm(forms.Form):
 
     def send_message(self):
         send_mail(self.cleaned_data['name'] + ' ' + datetime.now().strftime("%m/%d/%Y, %H:%M:%S"), self.cleaned_data['message'], self.cleaned_data['email'], [os.environ['SU_EMAIL']])
-
-
-class UploadImageForm(forms.Form):
-    img_name = forms.CharField(
-        max_length=200,
-        help_text='Max: 200 chars.'
-    )
-
-    def upload_image(self, image_file):
-        # https://docs.djangoproject.com/en/3.1/ref/files/storage/#the-filesystemstorage-class
-        fs = FileSystemStorage()
-        # Save the image
-        filename = fs.save(image_file.name, image_file)
-        # Get image URL
-        image_url = fs.url(filename)
-        # Create an image object
-        image = Image.objects.create(
-            url=image_url,
-            img_name=self.cleaned_data['img_name']
-        )
-        # Build context dictionary with image URL and name
-        context = {'url': image.url, 'name': image.img_name}
-
-        return context

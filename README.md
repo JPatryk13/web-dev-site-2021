@@ -70,9 +70,9 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Add automatic seeding database
   - [x] Test admin page
 - [ ] Tests
-  - [ ] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
+  - [x] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [x] Tests for models
-  - [ ] Tests for views
+  - [x] Tests for views
   - [ ] Tests for forms
   - [ ] Tests for templates
 - [ ] Front-end (HTML, CSS, JS; Bulma, Sass)

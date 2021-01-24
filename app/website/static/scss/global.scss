@@ -1,0 +1,127 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap');
+
+$hero-image: url('../img/hero-background/hero@2x.png');
+$background-image: url('../img/hero-background/white-background.png');
+$background-image-2: url('../img/hero-background/white-background-flipped.png');
+$home-background: url('../img/hero-background/hero-image.png');
+
+$blue: #0E38B1;
+$dark-grey: #292929;
+$white: #FFFFFF;
+
+$primary-facetype: 'Work Sans', sans-serif;
+$secondary-facetype: 'Open Sans', sans-serif;
+
+$extra-bold: 800;
+$bold: 700;
+$semi-bold: 600;
+$medium: 500;
+$light: 300;
+/*
+$font-sizes: 95px, 64px, 40px, 32px, 16px;
+
+Hero text: work sans, extra bold, 95px
+Project title: work sans, bold, 64px
+Section title (and subtitles/date in project detail): work sans, semibold, 40px
+Subtitle (project titles in proj section): open sans, bold, 32px
+Normal text: open sans, light, 16px
+*/
+
+h1 {
+  font-family:     $primary-facetype;
+  font-weight:     $extra-bold;
+  font-size:       95px;
+}
+
+h2 {
+  font-family:     $primary-facetype;
+  font-weight:     $bold;
+  font-size:       64px;
+}
+
+h3 {
+  font-family:     $primary-facetype;
+  font-weight:     $semi-bold;
+  font-size:       40px;
+}
+
+h4 {
+  font-family:     $secondary-facetype;
+  font-weight:     $bold;
+  font-size:       32px;
+}
+
+h5 {
+  font-family:     $secondary-facetype;
+  font-weight:     $bold;
+  font-size:       24px;
+}
+
+p {
+  font-family:     $secondary-facetype;
+  font-weight:     $light;
+  font-size:       16px;
+}
+
+.button-text {
+  font-family:     $primary-facetype;
+  font-weight:     $medium;
+  font-size:       16px;
+  text-transform:  uppercase;
+}
+
+#services,
+#contact {
+  background-image:       $hero-image;
+  background-repeat:      no-repeat;
+  background-attachment:  fixed;
+  background-size:        cover;
+  background-color:       #999;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  p {
+    color: $white;
+  }
+}
+
+#services { background-position: center 45%; }
+#contact { background-position: center 65%; }
+
+#projects {
+  background-image:       $background-image;
+  background-repeat:      no-repeat;
+  background-size:        cover;
+  background-color:       #999;
+}
+
+#home {
+  background-image:       $home-background;
+  background-repeat:      no-repeat;
+  background-size:        cover;
+  background-color:       #999;
+  background-position:    center 5%;
+}
+
+.left-line {
+  border-left: solid;
+  border-width: 6px;
+  border-color: $blue;
+  padding-left: 20px;
+}
+
+.bottom-line {
+  border-bottom: solid;
+  border-width: 6px;
+  border-color: $blue;
+  width: 35vw;
+  max-width: 1000px;
+}
+
+.blue-text {
+  color: blue;
+}

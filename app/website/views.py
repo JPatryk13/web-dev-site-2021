@@ -2,8 +2,8 @@
 
 from django.shortcuts import render, redirect
 from django.views import generic, View
-from .models import Project, Link, Image
-from .forms import HireMeForm, ContactForm, UploadImageForm
+from .models import Project, Link
+from .forms import HireMeForm, ContactForm
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
 from django.core.exceptions import PermissionDenied
@@ -30,7 +30,7 @@ class Index(View):
     initial = {'key': 'value'}
 
     def get(self, request, *args, **kwargs):
-        # The function creates a context and returns it to the index template
+        # The function creates the context and returns it to the index template
         # with request whenever the request == get
 
         # return HttpResponse(self.project_list) # Test line to return pure QuerySet
@@ -48,13 +48,17 @@ class Index(View):
 
         if form.is_valid():
             form.send_message()
-            return redirect('/contact-success/')
-
-
-def contact_success():
-    # temporarily it returns a success message when the contact form is
-    # successfully submitted
-    return HttpResponse('Success! Thank you for your message.')
+            context = {
+                'project_list': self.project_list,
+                'sent': True
+            }
+            return render(request, self.template_name, context)
+        else:
+            context = {
+                'project_list': self.project_list,
+                'sent': False
+            }
+            return render(request, self.template_name, context)
 
 
 class ProjectDetailView(View):
@@ -90,18 +94,24 @@ class HireMe(FormView):
     """
 
     template_name = 'hire-me.html'
+
     form_class = HireMeForm
-    success_url = '/hire-me-success/'
+    initial = {'key': 'value'}
 
-    def form_valid(self, form_class):
-        # The function that is run when the form input is valid. It sends a
-        # message.
+    def get(self, request, *args, **kwargs):
+        form = self.form_class(initial=self.initial)
+        context = {
+            'form': form
+        }
+        return render(request, self.template_name, context)
 
-        form_class.send_message()
-        return super().form_valid(form_class)
+    def post(self, request, *args, **kwargs):
+        form = self.form_class(request.POST)
 
-
-def hire_me_success():
-    # temporarily it returns a success message when the hire me form is
-    # successfully submitted
-    return HttpResponse('Success! Thank you for your message.')
+        if form.is_valid():
+            form.send_message()
+            context = {'sent': True}
+            return render(request, self.template_name, context)
+        else:
+            context = {'sent': False}
+            return render(request, self.template_name, context)

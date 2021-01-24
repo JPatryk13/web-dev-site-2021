@@ -1,0 +1,77 @@
+$blue: #0E38B1;
+$dark-grey: #292929;
+$white: #FFFFFF;
+
+.btn-wrapper {
+  height: 3em;
+  width: 18em;
+  position: relative;
+  left: 1.5em;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: $blue;
+    overflow: hidden;
+    width: 0;
+    height: 100%;
+    transition: .4s ease;
+  }
+
+  &:hover::before {
+    width: 80%;
+  }
+
+  img {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    height: 3em;
+    width: 3em;
+    transform: translate(-50%, -50%);
+    transition: .4s ease;
+  }
+
+  .btn-with-text {
+    background: rgba($blue, 0.06);
+    border: none;
+    cursor: pointer;
+    position: absolute;
+    height: 100%;
+    width: 80%;
+    color: $blue;
+    transition: .4s ease;
+
+    &:hover {
+      color: $white;
+    }
+
+    &:focus {
+      color: $white;
+      outline: none;
+      border-bottom-style: solid;
+      border-top-style: solid;
+      border-color: $dark-grey;
+    }
+  }
+}
+
+/*
+HTML:
+<div class="btn-wrapper" onmouseover="moveright('movable1')" onmouseout="moveback('movable1')">
+  <img id="movable1" src="{% static 'img/buttons/diamond.png' %}">
+  <img src="{% static 'img/buttons/diamond.png' %}">
+  <button class="btn-with-text" onclick="alert('Hello world!')">MY WORK</button>
+</div>
+*/
+
+.arrow {
+  position: relative;
+
+  img {
+    
+  }
+}

@@ -1,7 +1,7 @@
 # webdevsite
 Web development services entrepreneurship website. Using: **Docker** via running docker-compose directly on a Linux server.
 
-**PLAN 1.07**
+**PLAN 1.09**
 - [x] Base project
   - [x] Create GitHub repo and clone it
   - [x] Define prerequisites, stack and plan
@@ -69,18 +69,18 @@ Web development services entrepreneurship website. Using: **Docker** via running
   - [x] Add auto-creating superuser
   - [x] Add automatic seeding database
   - [x] Test admin page
-- [ ] Tests
+- [x] Tests
   - [x] Read: https://realpython.com/testing-in-django-part-1-best-practices-and-examples
   - [x] Tests for models
   - [x] Tests for views
-  - [ ] Tests for forms
-  - [ ] Tests for templates
+  - [x] Tests for forms
 - [ ] Front-end (HTML, CSS, JS; Bulma, Sass)
   - [x] Read how to use Bulma
-  - [ ] Read how to use Sass
+  - [x] Read how to use Sass
   - [ ] Rebuild current templates using Bulma (no need for assets from the design)
   - [ ] Test how to make assets move (JS exercise)
-  - [ ] Get assets
+  - [x] Get assets
+  - [ ] Create section bookmarks with links
   - [ ] Structure templates using Bulma
   - [ ] Define colours, fonts and sizes
   - [ ] Apply minor changes to a template and test if it works
@@ -1227,6 +1227,22 @@ img = models.URLField(
 38. Customise ProjectDetailView so it return both a project and a list of Links related to it
 
 ## **Done with the step-by-step guide. Updated only in the case of significant changes and errors.**
+
+## Useful commands:
+1. Running test and generating coverage reports
+```
+$ docker-compose exec web coverage run manage.py test -v 2
+$ docker-compose exec web coverage html
+```
+2. Cleaning up docker
+* List all images and stuff dangling around in docker: `$ docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'`
+* Remove images created before the date 'until': `$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"`
+* Remove all data associated with docker: `$ docker system prune --volumes`
+3. Dealing with SCSS - **I'm currently using DIY sass-compiler.py module**
+* Compile SCSS on the go: `$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/ --watch` (you can remove `docker-compose exec web` part and add it to the entrypoint file).
+* Compile SCSS manually: `$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/`
+In production add that to the entrypoint file before collectstatic command: `python manage.py sass website/static/scss/ website/static/css/ -t compressed`
+4. Enter the container's cmd : `$ docker exec -it <container ID> /bin/sh`
 
 
 

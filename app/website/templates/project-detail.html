@@ -1,18 +1,74 @@
 {% extends "base.html" %}
 
 {% block content %}
-  <h1>Title: {{ project.title }}</h1>
-  {{ project.date_finished }}
+<section class="section">
+  <div class="container">
 
-  <p>{{ project.description }}</p>
+    <div class="columns is-centered">
+      <div class="column is-12">
+        <h1 class="title">
+          {{ project.title }}
+        </h1>
+        <h2 class="subtitle">
+          {{ project.date_finished }}
+        </h2>
+      </div>
+    </div>
 
-  {% if links %}
-  <ul>
-    {% for link in links %}
-      <li>
-        <a href="{{ link.url }}">{{ link.url_name }}</a>
-      </li>
-    {% endfor %}
-  </ul>
-  {% endif %}
+    <div class="columns is-centered">
+
+      <div class="column is-8">
+        <div class="tile is-ancestor">
+          <div class="tile is-vertical">
+            <div class="tile">
+
+              <div class="tile is-parent is-1">
+                <div class="tile is-child">
+                  <!-- empty tile -->
+                </div>
+              </div> <!-- .tile.is-parent -->
+
+              <div class="tile is-parent is-vertical is-7">
+                <div class="tile is-child">
+                  <p class="title is-4">Description</p>
+                  <p>
+                    {{ project.description }}
+                  </p>
+                  <br>
+                  <p class="title is-4">Links</p>
+                  <br>
+                  {% if links %}
+                    <ul>
+                      {% for link in links %}
+                        <li>
+                          <a href="{{ link.url }}">{{ link.url_name }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              </div> <!-- .tile.is-parent -->
+
+            </div> <!-- .tile -->
+            <div class="tile">
+              <!-- bottom line -->
+            </div>
+          </div> <!-- .tile.is-vertical -->
+        </div> <!-- .tile.is-ancestor -->
+      </div> <!-- .column.is-8 -->
+
+      <div class="column is-1">
+        <!-- pagination on the bottom -->
+      </div>
+
+    </div> <!-- .columns -->
+
+  </div> <!-- .container -->
+</section>
+
+
+<!--
+
+-->
+
 {% endblock %}

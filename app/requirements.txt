@@ -3,6 +3,7 @@ coverage==5.3.1
 Django==3.1.2
 Faker==5.0.1
 gunicorn==20.0.4
+libsass==0.20.1
 psycopg2-binary==2.8.6
 python-dateutil==2.8.1
 pytz==2020.4

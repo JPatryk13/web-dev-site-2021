@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from faker import Faker
-from ...models import Project, Link, Image
+from ...models import Project, Link
 import random
 
 

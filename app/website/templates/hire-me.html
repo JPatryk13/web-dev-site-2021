@@ -1,11 +1,95 @@
 {% extends "base.html" %}
 
 {% block content %}
-<form action="" method="post">
-  {% csrf_token %}
-  <table>
-    {{ form.as_table }}
-  </table>
-  <input type="submit" value="Submit">
-</form>
+<section class="section">
+  <div class="container">
+    <div class="columns">
+      <div class="column is-10">
+        <h1 class="title">
+          Hire me
+        </h1>
+        <p class="subtitle">
+          Here, by filling up the simple form below you can let me know what your project is about and allow me to prove my skills one more time. If you got here by an accident go the <a href="#">Project</a> section and check out my latest work.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns">
+      <div class="column is-3">
+        <p class="title is-4">
+          Questionnaire
+        </p>
+        <!-- Submit button here -->
+      </div>
+      <div class="column is-8">
+        {% if form %}
+          <form action="" method="post">
+            {% csrf_token %}
+
+            {{ form.non_field_errors }}
+
+            <table>
+
+              <tr>
+                <th>{{ form.name.label_tag }}</th>
+                <td>
+                  {{ form.name.errors }}
+                  <div class="field">
+                    {{ form.name }}
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ form.email.label_tag }}</th>
+                <td>
+                  {{ form.email.errors }}
+                  <div class="field">
+                    {{ form.email }}
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ form.project_type.label_tag }}</th>
+                <td>
+                  {{ form.project_type.errors }}
+                  <div class="field">
+                    {{ form.project_type }}
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ form.project_status.label_tag }}</th>
+                <td>
+                  {{ form.project_status.errors }}
+                  <div class="field">
+                    {{ form.project_status }}
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                <th>{{ form.description.label_tag }}</th>
+                <td>
+                  {{ form.description.errors }}
+                  <div class="field">
+                    {{ form.description }}
+                  </div>
+                </td>
+              </tr>
+
+            </table>
+            <input type="submit" value="Submit">
+          </form>
+        {% elif sent %}
+          Successfully sent!
+        {% else %}
+          Could not send the message!
+        {% endif %}
+      </div> <!-- .column.is-8 -->
+    </div> <!-- columns -->
+  </div> <!-- .container -->
+</section>
 {% endblock %}

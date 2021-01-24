@@ -17,7 +17,9 @@ RUN apk update \
 # install Pillow
     && pip install Pillow \
 # remove build-deps
-    && apk del build-deps
+    && apk del build-deps \
+# install libsass deps
+    && apk add build-base
 
 # install dependencies
 RUN pip install --upgrade pip

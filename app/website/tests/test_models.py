@@ -1,6 +1,6 @@
 from django.test import TestCase
 from faker import Faker
-from website.models import Project, Link, Image
+from website.models import Project, Link
 from .mixins.ModelTestMixin import ModelTestMixin
 
 # Models test

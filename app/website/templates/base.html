@@ -11,10 +11,14 @@
     <meta name="description" content="An overview of services I'm providing and projects I have done.">
     <meta name="keywords" content="frontend,backend,design,django,python,docker,bulma,html,css,java,script,web,development,services,projecects,websites,apps">
 
+    {% load static %}
+
     <!-- Font awesome -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
     <!-- Bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+    <!-- Custom styles -->
+    <link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}">
   </head>
 
   <body>
@@ -26,5 +30,7 @@
 
     <!-- Footer template -->
     {% block footbar %}{% include "partials/footbar.html" %}{% endblock %}
+
+    <script src="{% static 'js/scripts.js' %}"></script>
   </body>
 </html>

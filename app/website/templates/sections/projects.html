@@ -1,0 +1,53 @@
+{% load static %}
+
+<section id="projects" class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 class="blue-text left-line blue">
+          Projects
+        </h3>
+      </div> <!-- .column -->
+    </div> <!-- .columns -->
+
+    {% if project_list %}
+      {% for project in project_list %}
+        <div class="columns is-centered" style="height: auto; padding-bottom: 5vh;">
+          <div class="column is-4" style="position: relative;">
+            <!-- <img src="{{ project.img }}" alt="{{ project.title }}"> -->
+            <img src="{% static 'img/lines-and-indicators/projects-placeholder-image.png' %}" alt="Placeholder image" style="width: 100%; height: auto;">
+
+            <h3 class="blue-text" style="position: absolute; bottom: 0; right: -3.5rem;">
+              {{ project.date_finished|date:"d/m" }}
+            </h3>
+          </div>
+
+          <div class="column is-8" style="position: relative; padding-left: 4rem;">
+            <h4>
+              {{ project.title }}
+              <a href="{{ project.get_absolute_url }}">
+              </a>
+            </h4>
+
+            <div class="left-line blue" style="position: relative; height: calc(300px - 32px);">
+              <p style="position: absolute; top: 1em;">
+                {{ project.prev_description }}
+              </p>
+              <div style="position: absolute; bottom: 0;">
+                {% block read-more-button %}
+                  {% with button_i=project.pk|stringformat:'i' %}
+                    {% with "read-more-"|add:button_i as button_id %}
+                      {% include "partials/text-button.html" with id=button_id text="READ MORE" %}
+                    {% endwith %}
+                  {% endwith %}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div> <!-- .columns -->
+      {% endfor %}
+    {% else %}
+      <p>There is no projects that has been finished.</p>
+    {% endif %}
+  </div> <!-- .container -->
+</section>

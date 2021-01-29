@@ -1,0 +1,7 @@
+{% load static %}
+
+<div class="btn-wrapper" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
+  <img id="{{ id }}" src="{% static 'img/buttons/diamond.png' %}">
+  <img src="{% static 'img/buttons/diamond.png' %}">
+  <button class="btn-with-text button-text">{{ text }}</button>
+</div>

@@ -1,0 +1,33 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;700&display=swap');
+
+$hero-image: url('../img/hero-background/hero@2x.png');
+$background-image: url('../img/hero-background/white-background.png');
+$background-image-2: url('../img/hero-background/white-background-flipped.png');
+$home-background: url('../img/hero-background/hero-image.png');
+
+$blue: #0E38B1;
+$dark-grey: #292929;
+$white: #FFFFFF;
+
+$primary-facetype: 'Work Sans', sans-serif;
+$secondary-facetype: 'Open Sans', sans-serif;
+
+$extra-bold: 800;
+$bold: 700;
+$semi-bold: 600;
+$medium: 500;
+$light: 300;
+/*
+$font-sizes: 95px, 64px, 40px, 32px, 16px;
+
+Hero text: work sans, extra bold, 95px
+Project title: work sans, bold, 64px
+Section title (and subtitles/date in project detail): work sans, semibold, 40px
+Subtitle (project titles in proj section): open sans, bold, 32px
+Normal text: open sans, light, 16px
+*/
+
+$dark-shadow: drop-shadow(0 0 4px rgba(0, 0, 0, 1));
+$blue-shadow: drop-shadow(0 0 4px rgba($blue, 1));
+$white-shadow: drop-shadow(0 0 4px rgba($white, 1));

@@ -1,0 +1,58 @@
+{% load static %}
+
+<section id="home" class="hero is-fullheight-with-navbar">
+  <div class="container">
+
+    <div class="hero-text left-line blue">
+      <h1>
+        <img src="{% static 'img/hero-background/hero-text.png' %}" alt="I am creating websites">
+      </h1>
+    </div>
+
+    <div class="columns">
+      <div class="column is-7 item">
+        <div class="hero-description">
+          <p class="pt-2">
+            My name is Patryk Jesionka. I am providing design and full stack website development services for small
+            and large buisnesses. Find out about my recent work or hire me to help your buisness stand out.
+          </p>
+        </div>
+
+        <div class="hero-buttons">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                {% block my-work-button %}
+                  {% include "partials/text-button.html" with id="my-work-btn" text="MY WORK" %}
+                {% endblock %}
+              </div>
+              <div class="level-item">
+                {% block hire-me-button %}
+                  {% include "partials/text-button.html" with id="hire-me-btn" text="HIRE ME" %}
+                {% endblock %}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-take-a-tour">
+          <div class="level">
+            <div class="level-left">
+              <div class="level-item">
+                <div class="bottom-line blue"></div>
+              </div>
+              <div class="level-item">
+                <div class="button-text blue-text">TAKE A TOUR</div>
+              </div>
+              <div class="level-item">
+                {% block take-a-tour-button %}
+                  {% include "partials/arrow-button.html" with down=True active=True id="take-a-tour" %}
+                {% endblock %}
+              </div>
+            </div>
+          </div> <!-- .level -->
+        </div> <!-- .hero-take-a-tour -->
+      </div> <!-- .column -->
+    </div> <!-- .columns -->
+  </div> <!-- .container -->
+</section>

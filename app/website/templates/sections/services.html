@@ -1,0 +1,49 @@
+{% load static %}
+
+<section id="services" class="section">
+  <div class="container">
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <h3 class="left-line white">
+          Services
+        </h3>
+        <p class="pt-2">
+          I base my design and development on modern concepts and technologies to solve emerging problems. I ensure continuous communication with clents to satisfy needs and deliver quality results at flexible prices.
+        </p>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+
+      <!-- I have no clue why they required 'staticfiles' here -->
+      {% block card-design %}
+        {% include "partials/card.html" with img_path="img/services-graphics/design@2x.png" header="Design" text="Building user satisfaction through carefully composed colors, images, shapes and icons. Applying modern and minimalistic approach which will make your website stang out amongst the competition." %}
+      {% endblock %}
+
+      {% block card-front-end %}
+        {% include "partials/card.html" with img_path="img/services-graphics/front-end@2x.png" header="Front end" text="Creating immersive user experience for both desktop and mobile devices using full capabilities of HTML, CSS and JavaScript." %}
+      {% endblock %}
+
+      {% block card-back-end %}
+        {% include "partials/card.html" with img_path="img/services-graphics/back-end@2x.png" header="Back end" text="Ensuring maintainability through clean and portable code. Extensive use of Python language and Django framework features allow for high speed and reliability of an application." %}
+      {% endblock %}
+
+
+    </div> <!-- .columns -->
+
+    <div class="columns is-centered">
+      <div class="column is-10">
+        <span>
+          <h5 class="pb-2">
+            What about my experience?
+          </h5>
+        </span>
+        <span>
+          <p class="left-line white">
+            My adventure with website development started over 7 years ago with basics of fron-end (HTML and CSS). 3 years later I learnt Python and shortly after that PHP and Laravel framework. Since then I moved back to Python and introduced myself to Django. For the past three years, I have also learnt graphic design and through my academic degree, I have developed my project management skills.
+          </p>
+        </span>
+      </div>
+    </div>
+  </div>
+</section>

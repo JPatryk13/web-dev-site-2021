@@ -2,10 +2,14 @@ import sass
 import os
 
 # Input and output directories for Sass and CSS files respectively
-input_dir = 'app/website/static/scss/'
-output_dir = 'app/website/static/css/'
+scss_file_dir = 'app/website/static/scss/style.scss'
+css_file_dir = 'app/website/static/css/style.css'
 
-sass.compile(dirname=(input_dir, output_dir), output_style='compressed')
+compiled_css_file = sass.compile(filename=scss_file_dir, output_style='compressed')
+
+# Write compiled css to a file
+write_file = open(css_file_dir, 'w', encoding="utf-8")
+write_file.write(compiled_css_file)
 
 # Collect static needs to run after compilation to get the file in the
 # staticfiles folder. Cannot directly transfer the file to the staticfiles; it

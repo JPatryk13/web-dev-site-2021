@@ -1,0 +1,24 @@
+{% load static %}
+
+<div class="column is-4">
+  <div class="card">
+    <div class="card-image">
+      <figure class="image is-4by3">
+        <img src="{% static img_path %}" alt="card image">
+        <img src="{% static 'img/services-graphics/frame.png' %}" alt="frame">
+      </figure>
+    </div> <!-- .card-image -->
+    <div class="card-content has-text-centered">
+      <div class="media">
+        <div class="media-content">
+          <h5>{{ header }}</h5>
+        </div>
+      </div> <!-- .media -->
+      <div class="content">
+        <p>
+          {{ text }}
+        </p>
+      </div> <!-- .content -->
+    </div> <!-- .card-content -->
+  </div> <!-- .card -->
+</div> <!-- .column.is-4 -->

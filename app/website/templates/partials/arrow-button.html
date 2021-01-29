@@ -1,0 +1,20 @@
+{% load static %}
+
+{% if active %}
+  {% with "frame-"|add:id as frame_id %}
+    {% if up %}
+      ...
+    {% elif down %}
+      <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
+        <img id="{{ frame_id }}" src="{% static 'img/buttons/frame@2x.png' %}">
+        <img id="{{ id }}" src="{% static 'img/buttons/btn-down@2x.png' %}">
+      </div>
+    {% endif %}
+  {% endwith %}
+{% else %}
+  {% if up %}
+    ...
+  {% elif down %}
+    ...
+  {% endif %}
+{% endif %}

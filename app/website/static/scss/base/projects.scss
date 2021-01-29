@@ -1,0 +1,23 @@
+#projects {
+  // The same as Services section
+  padding: 0 1.5rem;
+
+  .columns {
+    &:nth-child(1) {
+      margin: 0;
+
+      .column {
+        padding: 0 0.75rem;
+        padding-bottom: 3.75rem;
+
+        h3 {
+          padding-top: 3.75rem;
+        }
+      }
+    }
+
+    &:nth-child(2){
+
+    }
+  }
+}

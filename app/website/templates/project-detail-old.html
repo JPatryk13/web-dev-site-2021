@@ -1,0 +1,88 @@
+{% extends "base.html" %}
+
+{% block content %}
+<section id="project-datail" class="section" style="padding: 0 1.5rem;">
+  <div class="container">
+
+    <div class="columns" style="padding-top: 0; padding-bottom: 30vh;">
+      <div class="column is-7 left-line blue" style="position: relative; height: 70vh;">
+        <h2 class="blue-text" style="position: absolute; bottom: 5rem; line-height: 1; width: 90%;">
+          {{ project.title }}
+        </h2>
+        <h3 class="blue-text" style="position: absolute; bottom: 0;">
+          {{ project.date_finished|date:"d/m" }}
+        </h3>
+      </div>
+    </div>
+
+    <div class="columns is-centered">
+
+      <div class="column is-8">
+        <div class="tile is-ancestor">
+          <div class="tile is-vertical">
+            <div class="tile">
+
+              <div class="tile is-parent is-1">
+                <div class="tile is-child">
+                  <!-- empty tile -->
+                </div>
+              </div> <!-- .tile.is-parent -->
+
+              <div class="tile is-parent is-vertical is-7">
+                <div class="tile is-child">
+                  <p class="title is-4">Description</p>
+                  <p>
+                    {{ project.description }}
+                  </p>
+                  <br>
+                  <p class="title is-4">Links</p>
+                  <br>
+                  {% if links %}
+                    <ul>
+                      {% for link in links %}
+                        <li>
+                          <a href="{{ link.url }}">{{ link.url_name }}</a>
+                        </li>
+                      {% endfor %}
+                    </ul>
+                  {% endif %}
+                </div>
+              </div> <!-- .tile.is-parent -->
+
+            </div> <!-- .tile -->
+
+            <div class="tile">
+              <div class="level" style="width: 100%;">
+                <div class="level-left" style="width: 100%;">
+                  <div class="level-item" style="width: 90%; margin: 0;">
+                    <div class="bottom-line blue" style="width: 100%; max-width: none;"></div>
+                  </div>
+                  <div class="level-item" style="width: 10%;">
+                    <div class="button-text blue-text">NEXT</div>
+                  </div>
+                </div> <!-- level-left -->
+              </div> <!-- .level -->
+            </div>
+          </div> <!-- .tile.is-vertical -->
+        </div> <!-- .tile.is-ancestor -->
+      </div> <!-- .column.is-8 -->
+
+      <div class="column is-1" style="position: relative;">
+        <div style="position: absolute; bottom: -1rem; left: 0;">
+          {% block prev-proj %} <!-- is active? -->
+            {% include "partials/arrow-button.html" with color="blue" direction="up" active=True id="prev-proj" %}
+          {% endblock %}
+
+          <!-- an indication line here -->
+
+          {% block next-proj %} <!-- is active? -->
+            {% include "partials/arrow-button.html" with color="blue" direction="down" active=True id="next-proj" %}
+          {% endblock %}
+        </div>
+      </div>
+
+    </div> <!-- .columns -->
+
+  </div> <!-- .container -->
+</section>
+{% endblock %}

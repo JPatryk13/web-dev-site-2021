@@ -1,10 +1,48 @@
-<nav class="navbar is-fixed-top">
+{% load static %}
 
-  <div class="navbar-brand">
-    <a href="" class="navbar-item">
-      <h1 class="title is-4">NONE</h1>
-    </a>
+<nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
+  <div class="container">
+    <div class="navbar-brand">
+      <!-- <a class="navbar-item" href="https://bulma.io">
+        <img src="https://bulma.io/images/bulma-logo.png" width="112" height="28">
+      </a> -->
+
+      <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navBurgerMenu">
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+        <span aria-hidden="true"></span>
+      </a>
+    </div>
+
+    <div id="navBurgerMenu" class="navbar-menu">
+      <div class="navbar-start">
+        <a href="/#home" class="navbar-item">Home</a>
+        <a href="/#services" class="navbar-item">Services</a>
+        <a href="/#projects" class="navbar-item">Projects</a>
+        <a href="/#contact" class="navbar-item">Contact</a>
+        <a href="{% url 'hire-me' %}" class="navbar-item">Hire Me</a>
+      </div>
+
+      <div class="navbar-end">
+        <div class="navbar-item">
+          <img src="{% static 'img/social-media-icons/facebook-square-brands-blue@2x.png' %}" alt="facebook">
+        </div>
+        <div class="navbar-item">
+          <img src="{% static 'img/social-media-icons/git-square-brands-blue@2x.png' %}" alt="github">
+        </div>
+        <div class="navbar-item">
+          <img src="{% static 'img/social-media-icons/linkedin-brands-blue@2x.png' %}" alt="linkedin">
+        </div>
+        <div class="navbar-item">
+          <img src="{% static 'img/social-media-icons/twitter-square-brands-blue@2x.png' %}" alt="twitter">
+        </div>
+      </div>
+    </div>
   </div>
+</nav>
+
+
+<!-- <nav class="navbar is-fixed-top">
 
   <div class="navbar-menu">
     <div class="navbar-start">
@@ -22,4 +60,4 @@
     </div>
   </div>
 
-</nav>
+</nav> -->

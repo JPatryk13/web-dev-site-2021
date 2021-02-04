@@ -1,0 +1,76 @@
+#services {
+  // default: 3rem 1.5rem - I want to remove top (3em) and bottom padding.
+  padding: 0 1.5rem;
+
+  .columns {
+    &:nth-child(1) {
+      height: 30vh;
+      min-height: 250px;
+      margin: 0;
+
+      .column {
+        // default: 0.75rem - I want to remove top (0.75em) and bottom padding again.
+        // ...to accumulate it as 3.75 padding top in the header part
+        padding: 0 0.75rem;
+
+        h3 {
+          padding-top: 3.75rem;
+        } // h3
+      }
+    }
+
+    &:nth-child(2){
+      height: 70vh;
+      min-height: 600px;
+      margin: 0;
+
+      .card {
+        background-color: rgba(0, 0, 0, 0);
+
+        img {
+          // frame and image
+          width: auto;
+          margin: auto;
+
+          &:nth-child(1) {
+            // image
+            height: 30%;
+            top: -10%;
+          }
+        } // img
+      } // .card
+    } // &:nth-child(2)
+
+    &:nth-child(3) {
+      height: 35vh;
+      min-height: 350px;
+      margin: 0;
+
+      span {
+        position: absolute;
+        width: inherit;
+
+        &:nth-child(1) {
+          // header's span
+          height: 8vh;
+          bottom: 27vh;
+
+          h5 {
+            position: absolute;
+            bottom: 0;
+          }
+        }
+        &:nth-child(2) {
+          // paragraph's span
+          height: 27vh;
+          bottom: 0;
+
+          p {
+            padding-top: 1em;
+            height: 100%;
+          } // p
+        } // &:nth-child(2)
+      } // span
+    } // &:nth-child(3)
+  } // .columns
+}

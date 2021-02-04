@@ -1,7 +1,15 @@
 {% load static %}
 
-<div class="btn-wrapper" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
-  <img id="{{ id }}" src="{% static 'img/buttons/diamond.png' %}">
-  <img src="{% static 'img/buttons/diamond.png' %}">
-  <button class="btn-with-text button-text">{{ text }}</button>
-</div>
+{% if white %}
+  <div class="btn-wrapper white" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
+    <img id="{{ id }}" src="{% static 'img/buttons/diamond-white.png' %}">
+    <img src="{% static 'img/buttons/diamond-white.png' %}">
+    <button {% if form_id %}type="submit" form="{{ form_id }}" {% endif %}class="btn-with-text button-text">{{ text }}</button>
+  </div>
+{% else %}
+  <div class="btn-wrapper" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
+    <img id="{{ id }}" src="{% static 'img/buttons/diamond-blue.png' %}">
+    <img src="{% static 'img/buttons/diamond-blue.png' %}">
+    <button {% if form_id %}type="submit" form="{{ form_id }}" {% endif %}class="btn-with-text button-text">{{ text }}</button>
+  </div>
+{% endif %}

@@ -4,10 +4,12 @@
 $hero-image: url('../img/hero-background/hero@2x.png');
 $background-image: url('../img/hero-background/white-background.png');
 $background-image-2: url('../img/hero-background/white-background-flipped.png');
-$home-background: url('../img/hero-background/hero-image.png');
+$home-background: url('../img/hero-background/hero-image-alpha.png');
 
 $blue: #0E38B1;
 $dark-grey: #292929;
+$medium-grey: #707070;
+$bright-grey: #b4b4b4;
 $white: #FFFFFF;
 
 $primary-facetype: 'Work Sans', sans-serif;
@@ -31,3 +33,5 @@ Normal text: open sans, light, 16px
 $dark-shadow: drop-shadow(0 0 4px rgba(0, 0, 0, 1));
 $blue-shadow: drop-shadow(0 0 4px rgba($blue, 1));
 $white-shadow: drop-shadow(0 0 4px rgba($white, 1));
+
+$line-thickness: 6px;

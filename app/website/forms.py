@@ -12,7 +12,7 @@ class HireMeForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'John Smith',
+                'placeholder': 'Name',
                 'class': 'input'
             }
         )
@@ -23,7 +23,7 @@ class HireMeForm(forms.Form):
         required=True,
         widget=forms.EmailInput(
             attrs={
-                'placeholder': 'johnsmith@domain.com',
+                'placeholder': 'Email',
                 'class': 'input'
             }
         )
@@ -58,12 +58,11 @@ class HireMeForm(forms.Form):
 
     # tell me something about your project
     description = forms.CharField(
-        label='Project description',
         max_length=1000,
         required=True,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Tell me something about your project',
+                'placeholder': 'Project description',
                 'class': 'textarea'
             }
         )
@@ -89,7 +88,7 @@ class ContactForm(forms.Form):
         required=True,
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'John Smith',
+                'placeholder': 'Name',
                 'class': 'input'
             }
         )
@@ -100,19 +99,18 @@ class ContactForm(forms.Form):
         required=True,
         widget=forms.EmailInput(
             attrs={
-                'placeholder': 'johnsmith@domain.com',
+                'placeholder': 'Email',
                 'class': 'input'
             }
         )
     )
     # Message
     message = forms.CharField(
-        label='Message',
         max_length=1000,
         required=True,
         widget=forms.Textarea(
             attrs={
-                'placeholder': 'Write your message here',
+                'placeholder': 'Message',
                 'class': 'textarea'
             }
         )

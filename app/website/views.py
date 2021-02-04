@@ -6,6 +6,7 @@ from .models import Project, Link
 from .forms import HireMeForm, ContactForm
 from django.http import HttpResponse
 from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
 from django.core.exceptions import PermissionDenied
 
 
@@ -37,7 +38,8 @@ class Index(View):
         form = self.form_class(initial=self.initial)
         context = {
             'form': form,
-            'project_list': self.project_list
+            'project_list': self.project_list,
+            'go_to_contact': False
         }
         return render(request, self.template_name, context)
 
@@ -50,13 +52,15 @@ class Index(View):
             form.send_message()
             context = {
                 'project_list': self.project_list,
-                'sent': True
+                'sent': True,
+                'go_to_contact': True
             }
             return render(request, self.template_name, context)
         else:
             context = {
                 'project_list': self.project_list,
-                'sent': False
+                'sent': False,
+                'go_to_contact': True
             }
             return render(request, self.template_name, context)
 
@@ -79,6 +83,21 @@ class ProjectDetailView(View):
             'links': Link.objects.filter(project_id=self.kwargs['pk'])
         }
         return render(request, self.template_name, context)
+
+
+class ProjectDetail(ListView):
+    """Detail view using generic list view and pagination"""
+
+    model = Project
+    template_name = 'project-detail.html'
+    context_object_name = 'projects'
+    paginate_by = 1
+    queryset = Project.objects.all()
+
+    def get_context_data(self, **kwargs):
+        context = super(ProjectDetail, self).get_context_data(**kwargs)
+        context['links'] = Link.objects.all()
+        return context
 
 
 class HireMe(FormView):

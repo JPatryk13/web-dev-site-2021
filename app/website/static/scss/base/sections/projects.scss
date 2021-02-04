@@ -1,0 +1,74 @@
+#projects {
+  // The same as Services section
+  padding: 0 1.5rem;
+  br { height: 10vh; }
+
+  .columns {
+    &:nth-child(1) {
+      margin: 0;
+
+      .column {
+        padding: 0 0.75rem;
+        padding-bottom: 3.75rem;
+
+        h3 {
+          padding-top: 3.75rem;
+        }
+      }
+    }
+
+    &:nth-child(n+1){
+      height: auto;
+      padding-bottom: 6vh;
+
+      .column {
+        &.is-4 {
+          position: relative;
+          padding-left: 0;
+          padding-right: 0;
+
+          .img-big {
+            width: 100%;
+            height: auto;
+          }
+          .img-small {
+            display: none;
+            width: 100%;
+            height: auto;
+          }
+
+          @media screen and (max-width: 1410px) {
+            .img-small { display: initial; }
+            .img-big { display: none; }
+          }
+
+          h3 {
+            position: absolute;
+            bottom: 0;
+            right: -3.5rem;
+          }
+        } // .is-4
+
+        &.is-8 {
+          position: relative;
+          padding-left: 4rem;
+
+          .left-line {
+            position: relative;
+            // height: calc(300px - 32px);
+
+            p {
+              position: absolute;
+              top: 1rem;
+            }
+
+            div {
+              position: absolute;
+              bottom: 0;
+            }
+          }
+        } // .is-8
+      } // .column
+    } // &:nth-child(n+1)
+  } // .columns
+}

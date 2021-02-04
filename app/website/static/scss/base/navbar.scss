@@ -1,0 +1,37 @@
+nav {
+  .navbar-menu {
+    .navbar-start {
+      a {
+        color: $bright-grey;
+        padding-right: 2rem;
+        padding-left: 2rem;
+
+        &.is-active { color: $blue; }
+      }
+    }
+
+    .navbar-end {
+      div {
+        padding-right: 0.5rem;
+        padding-left: 0.5rem;
+      }
+
+      .navbar-item {
+        position: relative;
+        cursor: pointer;
+        width: 2.75rem;
+
+        img {
+          position: absolute;
+          width: 1.75rem;
+          height: 1.75rem;
+          transition: 0.2s ease;
+          bottom: 0.75rem;
+        }
+
+        &:active { filter: $dark-shadow; }
+        &:hover { img { bottom: 0.4rem; } }
+      }
+    }
+  }
+}

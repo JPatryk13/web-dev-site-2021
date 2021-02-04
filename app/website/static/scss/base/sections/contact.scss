@@ -1,0 +1,107 @@
+#contact {
+  height: 95vh;
+  min-height: 660px;
+
+  h5 { padding-bottom: 1.5rem; }
+  @media screen and (max-height: 750px) { h5 { padding-bottom: 0.75rem; } }
+
+  // The same as Services section
+  padding: 0 1.5rem;
+
+  .container {
+    position: relative;
+    height: 100%;
+
+    .columns {
+      &:nth-child(1) {
+        margin: 0;
+
+        .column {
+          padding: 0 0.75rem;
+
+          padding-bottom: 3.75rem;
+          @media screen and (max-height: 750px) { padding-bottom: 1.875rem; }
+
+          h3 { padding-top: 3.75rem; }
+        }
+      } // &:nth-child(1)
+
+      &:nth-child(2) {
+        .column {
+          &:nth-child(1) {
+            padding-right: 3rem;
+
+            .form-submit-image {  // that's the success/fail image
+              width: 30%;
+              margin: 2rem 35%;
+            }
+
+            form {
+              .field {
+                // distance between form fields
+                padding-bottom: 1.5rem;
+                @media screen and (max-height: 750px) { padding-bottom: 0.75rem; }
+
+                .control {
+                  input { border-radius: 0; }
+                  textarea {
+                    border-radius: 0;
+                    resize: none;
+                    height: 7em;
+                  } // textarea
+                } // .control
+              } // .field
+            } // form
+          } // &:nth-child(1)
+          &:nth-child(2) {
+            .level {
+              margin-bottom: 1rem;
+              &:nth-child(3) { margin-bottom: 1.5rem; }
+
+              img {
+                height: 2rem;
+                width: 2rem;
+              }
+            }
+
+            .social-media-icons {
+              .level-item {
+                position: relative;
+                height: 2rem;
+                width: 2rem;
+                cursor: pointer;
+
+                img {
+                  position: absolute;
+                  transition: 0.2s ease;
+                  top: 0;
+                }
+
+                &:active { filter: $white-shadow; }
+                &:hover { img { top: 0.5rem; } }
+              }
+            }
+          }
+        } // .column
+      } // &:nth-child(2)
+
+      &:nth-child(3) {
+        position: absolute;
+        bottom: 5vh;
+        width: 100%;
+
+        .level-left {
+          width: 100%;
+
+          .level-item:nth-child(1) {
+            width: 80%;
+
+            .bottom-line {
+              width: 100%;
+            }
+          }
+        }
+      } // &:nth-child(3)
+    } // .columns
+  }
+}

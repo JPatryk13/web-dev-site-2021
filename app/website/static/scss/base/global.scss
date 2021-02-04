@@ -28,11 +28,15 @@ h5 {
   font-size:       24px;
 }
 
-p {
+body,
+p,
+a {
   font-family:     $secondary-facetype;
   font-weight:     $light;
   font-size:       16px;
 }
+
+h1, h2, h3, h4, h5, p { color: black; }
 
 .button-text {
   font-family:     $primary-facetype;
@@ -41,13 +45,11 @@ p {
   text-transform:  uppercase;
 }
 
-.blue-text {
-  color: $blue;
-}
-
-.white-text {
-  color: $white;
-}
+.blue-text { color: $blue; }
+.white-text { color: $white; }
+.black-text { color: black; }
+.dark-grey-text { color: $dark-grey }
+.bright-grey-text { color: $bright-grey }
 
 #services,
 #contact {
@@ -64,30 +66,35 @@ p {
   h5,
   p {
     color: $white;
+    filter: drop-shadow(0 0 4px rgba(black, 0.7));
   }
 }
 
-#services { background-position: center 45%; }
-#contact { background-position: center 65%; }
+#contact { background-position:    center 75%; }
+#services { background-position:   center 45%; }
 
-#projects {
+#projects,
+#hire-me {
   background-image:       $background-image;
   background-repeat:      no-repeat;
   background-size:        cover;
   background-color:       #999;
 }
 
+#hire-me { background-position:   center 5%; }
+
 #home {
-  background-image:       $home-background;
-  background-repeat:      no-repeat;
-  background-size:        cover;
-  background-color:       #999;
-  background-position:    center 5%;
+  background-image:       $home-background, $hero-image;
+  background-repeat:      no-repeat, no-repeat;
+  background-attachment:  scroll, fixed;
+  background-size:        cover, cover;
+  background-color:       #999, #999;
+  background-position:    center 5%, center 45%;
 }
 
 .left-line {
   border-left: solid;
-  border-width: 6px;
+  border-width: $line-thickness;
   padding-left: 20px;
 
   &.blue {
@@ -99,11 +106,24 @@ p {
   }
 }
 
-.bottom-line {
+.bottom-line { // the one for arrow buttons
   border-bottom: solid;
-  border-width: 6px;
+  border-width: $line-thickness;
   width: 35vw;
   max-width: 1000px;
+
+  &.blue {
+    border-color: $blue;
+  }
+
+  &.white {
+    border-color: $white;
+  }
+}
+
+.top-line {
+  border-top: solid;
+  border-width: $line-thickness;
 
   &.blue {
     border-color: $blue;

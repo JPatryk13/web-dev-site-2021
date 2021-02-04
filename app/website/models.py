@@ -39,9 +39,6 @@ class Project(models.Model):
     def __str__(self):
         return self.title
 
-    def get_absolute_url(self):
-        return reverse('project-detail', args=[str(self.id)])
-
 
 class Link(models.Model):
     url_name = models.CharField(

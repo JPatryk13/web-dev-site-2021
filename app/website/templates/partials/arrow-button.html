@@ -2,13 +2,43 @@
 
 {% if active %}
   {% with "frame-"|add:id as frame_id %}
-    {% if up %}
-      ...
-    {% elif down %}
-      <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
-        <img id="{{ frame_id }}" src="{% static 'img/buttons/frame@2x.png' %}">
-        <img id="{{ id }}" src="{% static 'img/buttons/btn-down@2x.png' %}">
-      </div>
+  {% with "img/buttons/frame-"|add:color|add:"@2x.png" as frame_path %}
+  {% with "img/buttons/btn-down-"|add:color|add:"@2x.png" as diamond_path %}
+    <div class="btn-arrow {{ color }} {{ direction }}" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
+      <img id="{{ frame_id }}" src="{% static frame_path %}">
+      <img id="{{ id }}" src="{% static diamond_path %}">
+    </div>
+
+
+  {% endwith %}
+  {% endwith %}
+  {% endwith %}
+{% else %}
+  <div class="btn-arrow {{ direction }}" style="cursor: auto;">
+    <img src="{% static 'img/buttons/inactive-down-btn@2x.png' %}">
+  </div>
+{% endif %}
+
+<!-- {% if active %}
+  {% with "frame-"|add:id as frame_id %}
+    {% if blue %}
+      {% if up %}
+        ...
+      {% elif down %}
+        <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
+          <img id="{{ frame_id }}" src="{% static 'img/buttons/frame@2x.png' %}">
+          <img id="{{ id }}" src="{% static 'img/buttons/btn-down@2x.png' %}">
+        </div>
+      {% endif %}
+    {% elif white %}
+      {% if up %}
+        <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')" style="transform: rotate(180deg);">
+          <img id="{{ frame_id }}" src="{% static 'img/buttons/frame-white@2x.png' %}">
+          <img id="{{ id }}" src="{% static 'img/buttons/btn-down-white@2x.png' %}">
+        </div>
+      {% elif down %}
+        ...
+      {% endif %}
     {% endif %}
   {% endwith %}
 {% else %}
@@ -17,4 +47,4 @@
   {% elif down %}
     ...
   {% endif %}
-{% endif %}
+{% endif %} -->

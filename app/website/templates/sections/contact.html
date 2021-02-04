@@ -4,10 +4,10 @@
   <div class="container">
     <div class="columns is-centered">
       <div class="column is-10">
-        <h3>
+        <h3 class="left-line white">
           Contact
         </h3>
-        <p>
+        <p class="pt-2">
           Email me, meet me or text me on social media. Let me know what you think about my work or hire me! I am always happy to help!
         </p>
       </div> <!-- .column -->
@@ -18,35 +18,32 @@
         <h5>
           Drop me a line
         </h5>
+
         {% if form %}
-          <form action="" method="post">
+          <form method="post" id="contact_form">
             {% csrf_token %}
 
-            Non-field errors here
+            {% for field in form.visible_fields %}
+              {% if field.errors %}
+                {{ field.errors }}
+              {% endif %}
+              <div class="field">
+                <div class="control">
+                  {{ field }}
+                </div>
+              </div>
+            {% endfor %}
 
-            <table>
-              {% for field in form.visible_fields %}
-                <tr>
-                  <th>{{ field.label_tag }}</th>
-                  <td>
-                    {% if field.errors %}
-                      {{ field.errors }}
-                    {% endif %}
-
-                    <div class="field">
-                      {{ field }}
-                    </div>
-                  </td>
-                </tr>
-              {% endfor %}
-            </table>
-
-            <input type="submit" value="Submit">
+            {% block contact-submit-button %}
+              {% include "partials/text-button.html" with id="contact-submit-button" text="SEND" white=True form_id="contact_form" %}
+            {% endblock %}
           </form>
         {% elif sent %}
-          <p>Successfully sent!</p>
+          <img class="form-submit-image" src="{% static '/img/forms/submitted-white.png' %}">
+          <h4 class="has-text-centered">Successfully sent!</h4>
         {% else %}
-          <p>Could not send the message!</p>
+          <img class="form-submit-image" src="{% static '/img/forms/failed-white.png' %}">
+          <h4 class="has-text-centered">Could not send the message.</h4>
         {% endif %}
       </div> <!-- .column -->
 
@@ -58,9 +55,7 @@
         <div class="level">
           <div class="level-left">
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/other-icons/map@2x.png' %}" alt="Placeholder image">
             </div>
             <div class="level-item">
               <p>
@@ -70,12 +65,10 @@
           </div>
         </div>
 
-        <div class="level">
+        <div class="level" style="margin-bottom: 1rem;">
           <div class="level-left">
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/other-icons/mail@2x.png' %}" alt="Placeholder image">
             </div>
             <div class="level-item">
               <p>
@@ -88,9 +81,7 @@
         <div class="level">
           <div class="level-left">
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/other-icons/time@2x.png' %}" alt="Placeholder image">
             </div>
             <div class="level-item">
               <p>
@@ -104,31 +95,44 @@
           Or find me on social media
         </h5>
 
-        <div class="level">
+        <div class="level social-media-icons">
           <div class="level-left">
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/social-media-icons/facebook-square-brands-white@2x.png' %}" alt="facebook">
             </div>
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/social-media-icons/git-square-brands-white@2x.png' %}" alt="github">
             </div>
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/social-media-icons/linkedin-brands-white@2x.png' %}" alt="linkedin">
             </div>
             <div class="level-item">
-              <figure class="image is-24x24">
-                <img src="https://bulma.io/images/placeholders/24x24.png" alt="Placeholder image">
-              </figure>
+              <img src="{% static 'img/social-media-icons/twitter-square-brands-white@2x.png' %}" alt="twitter">
             </div>
           </div>
         </div>
       </div> <!-- .column -->
     </div> <!-- .columns -->
+
+    <div class="columns">
+      <div class="column is-7">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div class="bottom-line white"></div>
+            </div>
+            <div class="level-item">
+              <div class="button-text white-text">BACK TO TOP</div>
+            </div>
+            <div class="level-item">
+              {% block take-a-tour-button %}
+                {% include "partials/arrow-button.html" with color="white" direction="up" active=True id="back-to-top" %}
+              {% endblock %}
+            </div>
+          </div> <!-- level-left -->
+        </div> <!-- .level -->
+      </div> <!-- .column -->
+    </div> <!-- .columns -->
+
   </div> <!-- .container -->
 </section>

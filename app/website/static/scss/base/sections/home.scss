@@ -1,0 +1,47 @@
+#home {
+  .hero-text {
+    // Navbar is around 52px
+    height: calc(50vh - 26px);
+    display: flex;
+    align-items: flex-end;
+
+    img {
+      width: 50%;
+      padding-bottom: 3%
+    }
+  }
+
+  .column {
+    height: calc(50vh - 26px);
+    position: relative;
+
+    .hero-description {
+      p {
+        top: 1em;
+      }
+    }
+
+    .hero-buttons {
+      margin-top: 5vh;
+      justify-content: left;
+    }
+
+    .hero-take-a-tour {
+      position: absolute;
+      bottom: 5vh;
+      width: 100%;
+
+      .level-left {
+        width: 100%;
+
+        .level-item:nth-child(1) {
+          width: 80%;
+
+          .bottom-line {
+            width: 100%;
+          }
+        }
+      }
+    }
+  }
+}

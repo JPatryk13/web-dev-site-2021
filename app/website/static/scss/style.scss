@@ -6,6 +6,13 @@
 @import 'base/buttons';
 
 // Special Rules
-@import 'base/home-page';
-@import 'base/services';
-@import 'base/projects';
+@import 'base/sections/home';
+@import 'base/sections/services';
+@import 'base/sections/projects';
+@import 'base/sections/contact';
+@import 'base/hire-me';
+@import 'base/project-detail';
+
+// Footer/Navbar
+@import 'base/footbar';
+@import 'base/navbar';

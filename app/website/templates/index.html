@@ -2,6 +2,15 @@
 
 {% block content %}
 
+{% if go_to_contact %}
+  <script>
+    // If the form in contact section was previously filled up and submitted,
+    // the script will take the user to the contact section
+    window.location.hash = '#contact';
+  </script>
+{% endif %}
+
+
 <!-- Home -->
 {% block home %}{% include "sections/home.html" %}{% endblock %}
 

@@ -1,95 +1,98 @@
 {% extends "base.html" %}
 
 {% block content %}
-<section class="section">
+{% load static %}
+
+<section id="hire-me" class="section">
   <div class="container">
+
     <div class="columns">
+      <div class="column is-1"><!-- just some spacing --></div>
+
       <div class="column is-10">
-        <h1 class="title">
+        <h3 class="blue-text left-line blue">
           Hire me
-        </h1>
-        <p class="subtitle">
-          Here, by filling up the simple form below you can let me know what your project is about and allow me to prove my skills one more time. If you got here by an accident go the <a href="#">Project</a> section and check out my latest work.
+        </h3>
+        <p>
+          Here, by filling up the simple form below you can let me know what your project is about and allow me to prove my skills one more time. If you got here by an accident go the <a href="/#projects">Project section</a> and check out my latest work.
         </p>
       </div>
     </div>
 
-    <div class="columns">
+    <div class="columns top-line blue">
       <div class="column is-3">
-        <p class="title is-4">
+        <h5 class="blue-text">
           Questionnaire
-        </p>
-        <!-- Submit button here -->
+        </h5>
+        {% if form %}
+          <div>
+            {% block hire-me-submit-button %}
+              {% include "partials/text-button.html" with id="hire-me-submit-button" text="SUBMIT" blue=True form_id="hire_me_form" %}
+            {% endblock %}
+          </div>
+        {% endif %}
       </div>
       <div class="column is-8">
         {% if form %}
-          <form action="" method="post">
+          <form method="post" id="hire_me_form">
             {% csrf_token %}
 
-            {{ form.non_field_errors }}
+            {{ form.name.errors }}
+            <div class="field">
+              <div class="control">
+                {{ form.name }}
+              </div>
+            </div>
 
-            <table>
+            {{ form.email.errors }}
+            <div class="field">
+              <div class="control">
+                {{ form.email }}
+              </div>
+            </div>
 
-              <tr>
-                <th>{{ form.name.label_tag }}</th>
-                <td>
-                  {{ form.name.errors }}
-                  <div class="field">
-                    {{ form.name }}
-                  </div>
-                </td>
-              </tr>
+            {{ form.project_type.errors }}
+            <div class="field">
+              {{ form.project_type.label }}
+              <div class="control">
+                {{ form.project_type }}
+              </div>
+            </div>
 
-              <tr>
-                <th>{{ form.email.label_tag }}</th>
-                <td>
-                  {{ form.email.errors }}
-                  <div class="field">
-                    {{ form.email }}
-                  </div>
-                </td>
-              </tr>
+            {{ form.project_status.errors }}
+            <div class="field">
+              {{ form.project_status.label }}
+              <div class="control">
+                {{ form.project_status }}
+              </div>
+            </div>
 
-              <tr>
-                <th>{{ form.project_type.label_tag }}</th>
-                <td>
-                  {{ form.project_type.errors }}
-                  <div class="field">
-                    {{ form.project_type }}
-                  </div>
-                </td>
-              </tr>
+            {{ form.description.errors }}
+            <div class="field">
+              <div class="control">
+                {{ form.description }}
+              </div>
+            </div>
 
-              <tr>
-                <th>{{ form.project_status.label_tag }}</th>
-                <td>
-                  {{ form.project_status.errors }}
-                  <div class="field">
-                    {{ form.project_status }}
-                  </div>
-                </td>
-              </tr>
-
-              <tr>
-                <th>{{ form.description.label_tag }}</th>
-                <td>
-                  {{ form.description.errors }}
-                  <div class="field">
-                    {{ form.description }}
-                  </div>
-                </td>
-              </tr>
-
-            </table>
-            <input type="submit" value="Submit">
           </form>
-        {% elif sent %}
-          Successfully sent!
-        {% else %}
-          Could not send the message!
         {% endif %}
       </div> <!-- .column.is-8 -->
     </div> <!-- columns -->
+
+    {% if not form %}
+      <div class="columns">
+        <div class="column is-12">
+          {% if sent %}
+            <img class="form-submit-image" src="{% static '/img/forms/submitted-blue.png' %}">
+            <h4 class="has-text-centered blue-text">Successfully submitted!</h4>
+          {% else %}
+            <img class="form-submit-image" src="{% static '/img/forms/failed-blue.png' %}">
+            <h4 class="has-text-centered blue-text">Successfully submitted!</h4>
+          {% endif %}
+        </div>
+      </div>
+    {% endif %}
+
   </div> <!-- .container -->
 </section>
 {% endblock %}

@@ -130,4 +130,18 @@
   </div> <!-- .container -->
 </section>
 
+<script type="text/javascript">
+  columns = document.querySelectorAll('#project-datail .container .columns');
+
+  // Load elements on the project-detail page
+  window.addEventListener('load', function () {
+    columns[0].style.opacity = 1;
+  }, false);
+  // quick script for loading description and stuff when appropriate
+  window.addEventListener('scroll', function () {
+    if (window.scrollY > 0.3*window.innerHeight) {
+      columns[1].style.opacity = 1;
+    }
+  }, false);
+</script>
 {% endblock %}

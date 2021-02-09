@@ -28,6 +28,8 @@
   </head>
 
   <body>
+    {% block loading-screen %}{% include "partials/loading-screen.html" %}{% endblock %}
+
     <!-- Navbar template -->
     {% block navbar %}{% include "partials/navbar.html" %}{% endblock %}
 

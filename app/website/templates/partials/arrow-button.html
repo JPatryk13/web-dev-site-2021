@@ -4,7 +4,7 @@
   {% with "frame-"|add:id as frame_id %}
   {% with "img/buttons/frame-"|add:color|add:"@2x.png" as frame_path %}
   {% with "img/buttons/btn-down-"|add:color|add:"@2x.png" as diamond_path %}
-    <div class="btn-arrow {{ color }} {{ direction }}" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
+    <div class="btn-arrow {{ color }} {{ direction }}" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')" onclick="location.href='{{ go_to_id }}'">
       <img id="{{ frame_id }}" src="{% static frame_path %}">
       <img id="{{ id }}" src="{% static diamond_path %}">
     </div>

@@ -36,7 +36,7 @@
                 {% block read-more-button %}
                   {% with button_i=project.pk|stringformat:'i' %}
                     {% with "read-more-"|add:button_i as button_id %}
-                      {% include "partials/text-button.html" with id=button_id text="READ MORE" %}
+                      <a href="projects/?page={{ forloop.counter }}">{% include "partials/text-button.html" with id=button_id text="READ MORE" %}</a>
                     {% endwith %}
                   {% endwith %}
                 {% endblock %}

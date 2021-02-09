@@ -4,12 +4,12 @@
   <div class="btn-wrapper white" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
     <img id="{{ id }}" src="{% static 'img/buttons/diamond-white.png' %}">
     <img src="{% static 'img/buttons/diamond-white.png' %}">
-    <button {% if form_id %}type="submit" form="{{ form_id }}" {% endif %}class="btn-with-text button-text">{{ text }}</button>
+    <button {% if form_id %}type="submit" form="{{ form_id }}" {% elif go_to_url %}onclick="location.href='{% url go_to_url %}';" {% elif go_to_id %}onclick="location.href='{{ go_to_id }}'" {% endif %}class="btn-with-text button-text">{{ text }}</button>
   </div>
 {% else %}
   <div class="btn-wrapper" onmouseover="textButtonMouseOver('{{ id }}')" onmouseout="textButtonMouseOut('{{ id }}')">
     <img id="{{ id }}" src="{% static 'img/buttons/diamond-blue.png' %}">
     <img src="{% static 'img/buttons/diamond-blue.png' %}">
-    <button {% if form_id %}type="submit" form="{{ form_id }}" {% endif %}class="btn-with-text button-text">{{ text }}</button>
+    <button {% if form_id %}type="submit" form="{{ form_id }}" {% elif go_to_url %}onclick="location.href='{% url go_to_url %}';" {% elif go_to_id %}onclick="location.href='{{ go_to_id }}'" {% endif %}class="btn-with-text button-text">{{ text }}</button>
   </div>
 {% endif %}

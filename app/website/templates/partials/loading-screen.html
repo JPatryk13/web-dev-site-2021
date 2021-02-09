@@ -1,0 +1,12 @@
+<div class="loader-wrapper is-active">
+  <div class="loader is-loading"></div>
+</div>
+
+<script type="text/javascript">
+  window.addEventListener('load', function () {
+    setTimeout(function () {
+      document.querySelectorAll('nav.navbar.is-fixed-top')[0].style.opacity = 1;
+      document.querySelectorAll('.loader-wrapper')[0].classList.remove('is-active');
+    }, 2000);
+  }, false);
+</script>

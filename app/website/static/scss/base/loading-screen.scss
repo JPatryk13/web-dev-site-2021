@@ -1,0 +1,30 @@
+.loader-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 6px;
+
+  opacity: 0;
+  z-index: -2; // just in case if the background is -1
+  transition: opacity .3s;
+
+  .loader {
+    height: 5rem;
+    width: 5rem;
+
+    animation-duration: 2s;
+    border-color: $blue;
+    border-radius: 0;
+  }
+
+  &.is-active {
+    opacity: 1;
+    z-index: 3; // just in case if something has z-index: 2 (like buttons or whatever)
+  }
+}

@@ -77,7 +77,7 @@
                   top: 0;
                 }
 
-                &:active { filter: $white-shadow; }
+                &:active { filter: drop-shadow(0 0 4px rgba($bright-grey, 1)); }
                 &:hover { img { top: 0.5rem; } }
               }
             }

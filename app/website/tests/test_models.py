@@ -14,10 +14,6 @@ class ProjectTest(TestCase, ModelTestMixin):
         # Test if the __str__ function returns proj.title
         self.assertEqual(self.proj.__str__(), self.proj.title)
 
-    def test_get_absolute_url(self):
-        # Test if get_absolute_url function returns proj.id
-        self.assertEqual(self.proj.get_absolute_url(), '/project/' + str(self.proj.pk))
-
 
 class LinkTest(TestCase, ModelTestMixin):
 

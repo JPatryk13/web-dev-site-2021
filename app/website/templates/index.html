@@ -27,4 +27,24 @@
 {% block contact %}{% include "sections/contact.html" %}{% endblock %}
 
 
+<script type="text/javascript">
+  // Load elemnts one by one on the main page
+  window.addEventListener('load', function () {
+    const sectionYRange = getSectionHeights();
+    const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+    const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
+    loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+  }, false);
+
+  window.addEventListener('scroll', function () {
+    const sectionYRange = getSectionHeights();
+    const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+    const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
+    loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+
+    let menuItems = document.querySelectorAll('#navBurgerMenu .navbar-start .navbar-item');
+    addActiveClassAtIndex(menuItems);
+  }, false);
+</script>
+
 {% endblock %}

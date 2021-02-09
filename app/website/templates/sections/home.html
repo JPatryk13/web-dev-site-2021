@@ -23,12 +23,12 @@
             <div class="level-left">
               <div class="level-item">
                 {% block my-work-button %}
-                  {% include "partials/text-button.html" with id="my-work-btn" text="MY WORK" %}
+                  {% include "partials/text-button.html" with id="my-work-btn" text="MY WORK" go_to_id="/#projects" %}
                 {% endblock %}
               </div>
               <div class="level-item">
                 {% block hire-me-button %}
-                  {% include "partials/text-button.html" with id="hire-me-btn" text="HIRE ME" %}
+                  {% include "partials/text-button.html" with id="hire-me-btn" text="HIRE ME" go_to_url="hire-me" %}
                 {% endblock %}
               </div>
             </div>
@@ -46,7 +46,7 @@
               </div>
               <div class="level-item">
                 {% block take-a-tour-button %}
-                  {% include "partials/arrow-button.html" with color="blue" direction="down" active=True id="take-a-tour" %}
+                  {% include "partials/arrow-button.html" with color="blue" direction="down" active=True id="take-a-tour" go_to_id="/#services" %}
                 {% endblock %}
               </div>
             </div>

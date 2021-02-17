@@ -3,6 +3,7 @@ from faker import Faker
 from website.models import Project, Link
 from .mixins.ModelTestMixin import ModelTestMixin
 
+
 # Models test
 class ProjectTest(TestCase, ModelTestMixin):
 

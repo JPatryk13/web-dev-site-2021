@@ -5,6 +5,7 @@ from django.urls import resolve
 from django.urls.exceptions import Resolver404
 from django.core.exceptions import PermissionDenied
 
+
 # Based on the https://blog.bitlabstudio.com/proper-unit-tests-for-your-django-views-b4a1730a922e
 class ViewTestMixin(object):
     """Mixin with shortcuts for view tests."""

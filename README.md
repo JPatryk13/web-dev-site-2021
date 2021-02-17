@@ -1236,7 +1236,7 @@ $ docker-compose exec web coverage html
 ```
 2. Cleaning up docker
 * List all images and stuff dangling around in docker: `$ docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'`
-* Remove images created before the date 'until': `$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"`
+* Remove images created before the date 'until': `$ docker image prune -a --force` or `$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"`
 * Remove all data associated with docker: `$ docker system prune --volumes`
 3. Dealing with SCSS - **I'm currently using DIY sass-compiler.py module**
 * Compile SCSS on the go: `$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/ --watch` (you can remove `docker-compose exec web` part and add it to the entrypoint file).
@@ -1482,3 +1482,4 @@ date_finished = models.DateTimeField(
       help_text='When the project has been finished.'
   )
 ```
+11. Fixed the error with Pillow... it took me so long. Worth it.

@@ -3,30 +3,36 @@
 ###########
 
 # pull official base image
-FROM python:3.8-alpine AS builder
+FROM python:3.8.6-alpine AS builder
 
 # set work directory
 WORKDIR /usr/src/app
 
 # set environment variables
-ENV PYTHONDONTWRITEBYTECODE 1
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
-# install psycopg2 dependencies
-RUN apk update && apk add postgresql-dev \
-    gcc \
-    python3-dev \
-    musl-dev
-
-# lint
-RUN pip install --upgrade pip
-RUN pip install flake8
-COPY . .
-RUN flake8 --ignore=E501,F401 --exclude=virt/ .
-
-# install dependencies
+# copy reqs file
 COPY ./requirements.txt .
-RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt
+
+# upgrade pip
+RUN pip install --upgrade pip
+
+# add psycopg2 deps
+RUN apk update \
+    && apk add postgresql-dev gcc python3-dev musl-dev \
+# add pillow deps
+    && apk add build-base py-pip jpeg-dev zlib-dev
+
+# map /lib to /usr/lib (deps folder) and install libraries
+RUN LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt"
+
+# copy project files
+COPY . .
+
+# lint (install and run flake8)
+RUN pip install flake8
+RUN flake8 --ignore=E501,F401 --exclude=virt/ .
 
 
 #########
@@ -34,12 +40,12 @@ RUN pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requir
 #########
 
 # pull official base image
-FROM python:3.8-alpine
+FROM python:3.8.6-alpine
 
-# create directory for the app user
+# create directory for the app
 RUN mkdir -p /home/app
 
-# create the app user
+# create group 'app' for '/home/app' and add 'app' user to the group
 RUN addgroup -S app && adduser -S app -G app
 
 # create the appropriate directories
@@ -48,15 +54,19 @@ ENV APP_HOME=/home/app/web
 RUN mkdir $APP_HOME
 RUN mkdir $APP_HOME/staticfiles
 RUN mkdir $APP_HOME/mediafiles
+
+# set working directory
 WORKDIR $APP_HOME
 
-# install dependencies
-RUN apk update && apk add libpq
+# install dependencies for Pillow (damn libjpeg...)
+RUN apk update && apk add libpq libjpeg
+
+# copy and install requirements from wheels
 COPY --from=builder /usr/src/app/wheels /wheels
 COPY --from=builder /usr/src/app/requirements.txt .
 RUN pip install --no-cache /wheels/*
 
-# copy entrypoint-prod.sh
+# copy entrypoint.prod
 COPY ./entrypoint.prod.sh $APP_HOME
 
 # copy project
@@ -68,5 +78,5 @@ RUN chown -R app:app $APP_HOME
 # change to the app user
 USER app
 
-# run entrypoint.prod.sh
+# run entrypoint.prod
 ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]

@@ -51,9 +51,9 @@ class ImageConverter:
         # resize and crop images to fit
         small_thumbnail = ImageOps.fit(input_img, small_mask.size)
         big_thumbnail = ImageOps.fit(input_img, big_mask.size)
-        baground_img = ImageOps.fit(input_img, (1920, 1080))
+        # baground_img = ImageOps.fit(input_img, (1920, 1080))
 
-        small_thumbnail.putalpha(small_mask) # Modifies the original image without return
+        small_thumbnail.putalpha(small_mask)  # Modifies the original image without return
         big_thumbnail.putalpha(big_mask)
 
         small_thumbnail.save('./static/img/chuj1.png')

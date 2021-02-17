@@ -9,42 +9,20 @@
       <img id="{{ id }}" src="{% static diamond_path %}">
     </div>
 
+    <div class="mobile-btn-arrow {{ color }} {{ direction }}" onclick="location.href='{{ go_to_id }}'">
+      <img src="{% static diamond_path %}">
+    </div>
+
 
   {% endwith %}
   {% endwith %}
   {% endwith %}
 {% else %}
-  <div class="btn-arrow {{ direction }}" style="cursor: auto;">
+  <div class="btn-arrow {{ direction }}">
     <img src="{% static 'img/buttons/inactive-down-btn@2x.png' %}">
   </div>
-{% endif %}
 
-<!-- {% if active %}
-  {% with "frame-"|add:id as frame_id %}
-    {% if blue %}
-      {% if up %}
-        ...
-      {% elif down %}
-        <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')">
-          <img id="{{ frame_id }}" src="{% static 'img/buttons/frame@2x.png' %}">
-          <img id="{{ id }}" src="{% static 'img/buttons/btn-down@2x.png' %}">
-        </div>
-      {% endif %}
-    {% elif white %}
-      {% if up %}
-        <div class="btn-arrow" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')" style="transform: rotate(180deg);">
-          <img id="{{ frame_id }}" src="{% static 'img/buttons/frame-white@2x.png' %}">
-          <img id="{{ id }}" src="{% static 'img/buttons/btn-down-white@2x.png' %}">
-        </div>
-      {% elif down %}
-        ...
-      {% endif %}
-    {% endif %}
-  {% endwith %}
-{% else %}
-  {% if up %}
-    ...
-  {% elif down %}
-    ...
-  {% endif %}
-{% endif %} -->
+  <div class="mobile-btn-arrow {{ direction }}">
+    <img src="{% static 'img/buttons/mobile-inactive-down-btn@2x.png' %}">
+  </div>
+{% endif %}

@@ -42,8 +42,10 @@
     const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
     loadElement(viewportTop, viewportBottom, elementsYRange, elements);
 
-    let menuItems = document.querySelectorAll('#navBurgerMenu .navbar-start .navbar-item');
-    addActiveClassAtIndex(menuItems);
+    let desktopMenuItems = document.querySelectorAll('#desktopMenu.navbar-menu .navbar-start .navbar-item');
+    let mobileMenuItems = document.querySelectorAll('#mobileMenu.navbar-menu .navbar-start .navbar-item');
+    addActiveClassAtIndex(desktopMenuItems);
+    addActiveClassAtIndex(mobileMenuItems);
   }, false);
 </script>
 

@@ -124,6 +124,66 @@
               {% endblock %}
             {% endif %}
           {% endif %}
+
+        </div>
+      </div>
+
+      <!-- moible pagination -->
+      <div class="column is-12 mobile-pagination">
+        <div class="level is-mobile">
+          <div class="level-left">
+            {% if is_paginated %}
+
+              <div class="level-item">
+                <!-- ARROW LEFT -->
+                {% if page_obj.has_previous %} <!-- enabled -->
+                  <a href="?page={{ page_obj.previous_page_number }}">
+                    {% block mobile-prev-proj %}
+                      {% include "partials/arrow-button.html" with color="blue" direction="left" active=True id="mobile-prev-proj" %}
+                    {% endblock %}
+                  </a>
+                {% else %} <!-- disabled -->
+                  {% block mobile-prev-proj-inactive %}
+                    {% include "partials/arrow-button.html" with direction="left" active=False %}
+                  {% endblock %}
+                {% endif %}
+              </div>
+
+              <div class="level-item">
+                <ul class="pagination-list">
+                  {% for i in paginator.page_range %}
+                    {% if page_obj.number == i %}
+                    <li>
+                      <h5 class="blue-text">{{ i }}</h5>
+                    </li>
+                    {% else %}
+                      <li>
+                        <a href="?page={{ i }}">
+                          <h5 class="bright-grey-text">{{ i }}</h5>
+                        </a>
+                      </li>
+                    {% endif %}
+                  {% endfor %}
+                </ul>
+              </div>
+
+              <div class="level-item">
+                <!-- ARROW RIGHT -->
+                {% if page_obj.has_next %} <!-- enabled -->
+                  <a href="?page={{ page_obj.next_page_number }}">
+                    {% block mobile-next-proj %} <!-- is active? -->
+                      {% include "partials/arrow-button.html" with color="blue" direction="right" active=True id="mobile-next-proj" %}
+                    {% endblock %}
+                  </a>
+                {% else %} <!-- disabled -->
+                  {% block mobile-next-proj-inactive %}
+                    {% include "partials/arrow-button.html" with direction="right" active=False %}
+                  {% endblock %}
+                {% endif %}
+              </div>
+
+              {% endif %}
+          </div>
         </div>
       </div>
     </div> <!-- .columns -->

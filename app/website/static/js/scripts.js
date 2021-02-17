@@ -1,6 +1,6 @@
 // Buttons with text
 function textButtonMouseOver(id){
-  // That 0.05rem is the fraction of a pixel (0.8px...) that was bothering me  
+  // That 0.05rem is the fraction of a pixel (0.8px...) that was bothering me
   document.getElementById(id).style.left = "15.95rem";
 }
 
@@ -67,13 +67,28 @@ function adjustProjectsCardHeight(){
   let rem = 16;
   let buttonHeight = 3*rem;
   let paddings = 2*rem + 12; // above and below the paragraph + below the card's body
-  let unifiedMinCardHeight = buttonHeight + paddings +  Math.max(...bodyParagraphHeight) + Math.max(...cardTitleHeight)
+  let unifiedMinCardHeight = buttonHeight + paddings +  Math.max(...bodyParagraphHeight) + Math.max(...cardTitleHeight);
 
   for(var i = 0; i < card.length; i++){
     // minHeight so the card does not shrink too much (it does anyways)
     card[i].style.minHeight = (unifiedMinCardHeight.toString() + 'px');
+
+    if (window.innerWidth > 768) {
+      // for desktop
+      coefficient = 1;
+    } else if (window.innerWidth > 550) {
+      // for mobiles
+      coefficient = 0.7;
+      // min height for mobiles shall be applied on card body instead
+      cardBody[i].style.minHeight = (unifiedMinCardHeight.toString() + 'px');
+    } else {
+      // for very narrow mobiles (paragraphs in the card fold a lot)
+      coefficient = 1.2;
+      // min height for mobiles shall be applied on card body instead
+      cardBody[i].style.minHeight = (unifiedMinCardHeight.toString() + 'px');
+    }
     // the flexible height of cards I was fighting for
-    cardBody[i].style.height = ((imageHeight[i] - cardTitleHeight[i]).toString() + 'px');
+    cardBody[i].style.height = ((coefficient*imageHeight[i] - cardTitleHeight[i]).toString() + 'px');
   }
 }
 

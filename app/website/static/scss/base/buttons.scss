@@ -1,3 +1,5 @@
+.mobile-btn-wrapper { display: none; }
+
 .btn-wrapper {
   height: 3rem;
   width: 18rem;
@@ -6,7 +8,7 @@
   margin-right: 1rem;
 
   // A little correction for the position of elements
-  button, img { left:1.5rem; z-index: 2; }
+  button, img { left: 1.5rem; z-index: 2; }
 
   &::before {
     content: '';
@@ -78,6 +80,8 @@
     }
   }
 }
+
+.mobile-btn-arrow { display: none; }
 
 .btn-arrow {
   position: relative;

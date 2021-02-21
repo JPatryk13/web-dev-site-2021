@@ -124,6 +124,56 @@ Web development services entrepreneurship website. Using: **Docker** via running
 7. Virtualenv
 8. Docker 19.03.13
 
+## Useful commands:
+1. Running test and generating coverage reports
+```
+$ docker-compose exec web coverage run manage.py test -v 2
+$ docker-compose exec web coverage html
+```
+2. Cleaning up docker
+* List all images and stuff dangling around in docker:
+```
+$ docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'
+```
+* Remove images created before the date 'until':
+```
+$ docker image prune -a --force
+```
+or `$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"`
+* Remove all data associated with docker:
+```
+$ docker system prune --volumes
+```
+3. Dealing with SCSS - **I'm currently using DIY sass-compiler.py module**
+* Compile SCSS on the go:
+`$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/ --watch` (you can remove `docker-compose exec web` part and add it to the entrypoint file).
+* Compile SCSS manually:
+`$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/`
+In production add that to the entrypoint file before collectstatic command:
+`python manage.py sass website/static/scss/ website/static/css/ -t compressed`
+4. Enter the container's cmd :
+```
+$ docker exec -it <container ID> /bin/sh
+```
+5. Deploying to heroku
+```
+$ cd ~/dev/webdevsite/app \
+&& APP_NAME='agile-island-29596' \
+&& BLUE='\033[0;34m' \
+&& GREEN='\033[0;32m' \
+&& NC='\033[0m' \
+&& echo -e "${BLUE}Building image... ${NC}" \
+&& docker build -f Dockerfile.prod -t registry.heroku.com/$APP_NAME/web . \
+&& echo -e "${BLUE}Pushing image to Heroku... ${NC}" \
+&& docker push registry.heroku.com/$APP_NAME/web \
+&& echo -e "${BLUE}Running the container... ${NC}" \
+&& heroku container:release -a $APP_NAME web \
+&& echo -e "${BLUE}Cleaning up... ${NC}" \
+&& docker system prune -af \
+&& echo -e "${GREEN}Done. ${NC}" \
+&& heroku open -a $APP_NAME
+```
+
 ## Steps:
 
 ### Project Set-up:
@@ -1227,22 +1277,6 @@ img = models.URLField(
 38. Customise ProjectDetailView so it return both a project and a list of Links related to it
 
 ## **Done with the step-by-step guide. Updated only in the case of significant changes and errors.**
-
-## Useful commands:
-1. Running test and generating coverage reports
-```
-$ docker-compose exec web coverage run manage.py test -v 2
-$ docker-compose exec web coverage html
-```
-2. Cleaning up docker
-* List all images and stuff dangling around in docker: `$ docker images --format 'table {{.Repository}}\t{{.Tag}}\t{{.ID}}\t{{.CreatedAt}}\t{{.Size}}'`
-* Remove images created before the date 'until': `$ docker image prune -a --force` or `$ docker image prune -a --force --filter "until=2020-11-20T14:22:53"`
-* Remove all data associated with docker: `$ docker system prune --volumes`
-3. Dealing with SCSS - **I'm currently using DIY sass-compiler.py module**
-* Compile SCSS on the go: `$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/ --watch` (you can remove `docker-compose exec web` part and add it to the entrypoint file).
-* Compile SCSS manually: `$ docker-compose exec web python manage.py sass website/static/scss/ website/static/css/`
-In production add that to the entrypoint file before collectstatic command: `python manage.py sass website/static/scss/ website/static/css/ -t compressed`
-4. Enter the container's cmd : `$ docker exec -it <container ID> /bin/sh`
 
 
 

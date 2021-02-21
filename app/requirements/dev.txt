@@ -1,0 +1,5 @@
+-r common.txt
+
+# coverage==5.3.1
+# libsass==0.20.1
+Faker==5.0.1

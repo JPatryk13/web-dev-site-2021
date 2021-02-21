@@ -20,6 +20,8 @@
     .column {
       height: 60vh;
 
+      @media screen and (max-height: 510px) {.hero-buttons .level-item:nth-child(1) {display: none;}}
+
       .hero-take-a-tour {
         width: 100vw;
         bottom: 5rem;
@@ -38,6 +40,7 @@
 /* SERVICES */
 @media screen and (max-width: 768px) {
   #services {
+    .columns:nth-child(1) {margin-bottom: 10rem;}
     .columns:nth-child(2) {height: 120rem;}
     .columns:nth-child(3) span:nth-child(1) {width: 100%;}
   }
@@ -109,7 +112,13 @@
       }
       .column.is-8 {
         padding-right: 4rem;
-        h4 {padding-bottom: .2rem;}
+
+        .left-line.blue {display: none;}
+
+        .mobile-card-button {
+          display: block;
+          padding: 1.5rem 0;
+        }
       }
     }
   }
@@ -118,7 +127,7 @@
 /* CONTACT */
 @media screen and (max-width: 768px) {
   #contact {
-    height: 190vh;
+    height: 90rem;
     .columns:nth-child(2) .column:nth-child(2) {
       padding-top: 5rem;
 
@@ -151,7 +160,8 @@
     .columns:nth-child(3) {
       .level-item {
         &:nth-child(1),
-        &:nth-child(2) {
+        &:nth-child(2),
+        &:nth-child(3) {
           display: none;
         }
       }

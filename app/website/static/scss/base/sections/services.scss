@@ -54,7 +54,12 @@
         &:nth-child(1) {
           // header's span
           height: 8vh;
-          bottom: 27vh;
+          bottom: 11rem;
+
+          // I know it's ugly...
+          @media screen and (max-width: 580px) { bottom: 18rem; }
+          @media screen and (max-width: 400px) { bottom: 25rem; }
+          @media screen and (max-width: 285px) { bottom: 30rem; }
 
           h5 {
             position: absolute;
@@ -63,8 +68,12 @@
         }
         &:nth-child(2) {
           // paragraph's span
-          height: 27vh;
+          height: 11rem;
           bottom: 0;
+
+          @media screen and (max-width: 580px) { height: 18rem; }
+          @media screen and (max-width: 400px) { height: 25rem; }
+          @media screen and (max-width: 285px) { bottom: 30rem; }
 
           p {
             padding-top: 1em;

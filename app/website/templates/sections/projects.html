@@ -42,12 +42,22 @@
                 {% endblock %}
               </div>
             </div>
+
+            <div class="mobile-card-button">
+              <a href="projects/?page={{ forloop.counter }}">
+                <h5 class="blue-text">Read more...</h5>
+              </a>
+            </div>
           </div>
         </div> <!-- .columns -->
       {% endfor %}
       <br>
     {% else %}
-      <p>There is no projects that has been finished.</p>
+      <div class="columns is-centered project-card">
+        <div class="column is-12 has-text-centered">
+          <p>Seems like no projects can be displayed at the moment. Please, come back later :)</p>
+        </div>
+      </div> <!-- .columns -->
     {% endif %}
   </div> <!-- .container -->
 </section>

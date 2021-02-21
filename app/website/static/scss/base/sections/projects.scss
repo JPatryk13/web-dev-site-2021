@@ -67,6 +67,10 @@
               bottom: 0;
             }
           }
+
+          .mobile-card-button {
+            display: none; 
+          }
         } // .is-8
       } // .column
     } // &:nth-child(n+1)

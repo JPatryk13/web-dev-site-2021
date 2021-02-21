@@ -13,7 +13,7 @@ ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
 # copy reqs file
-COPY ./requirements.txt .
+COPY ./requirements/ ./requirements/
 
 # upgrade pip
 RUN pip install --upgrade pip
@@ -25,7 +25,7 @@ RUN apk update \
     && apk add build-base py-pip jpeg-dev zlib-dev
 
 # map /lib to /usr/lib (deps folder) and install libraries
-RUN LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements.txt"
+RUN LIBRARY_PATH=/lib:/usr/lib /bin/sh -c "pip wheel --no-cache-dir --no-deps --wheel-dir /usr/src/app/wheels -r requirements/prod.txt"
 
 # copy project files
 COPY . .
@@ -61,10 +61,12 @@ WORKDIR $APP_HOME
 # install dependencies for Pillow (damn libjpeg...)
 RUN apk update && apk add libpq libjpeg
 
-# copy and install requirements from wheels
+# copy and requirements and wheels
 COPY --from=builder /usr/src/app/wheels /wheels
-COPY --from=builder /usr/src/app/requirements.txt .
-RUN pip install --no-cache /wheels/*
+COPY --from=builder /usr/src/app/requirements/prod.txt .
+
+# update pip and install requirements from wheels
+RUN /usr/local/bin/python -m pip install --upgrade pip && pip install --no-cache /wheels/*
 
 # copy entrypoint.prod
 COPY ./entrypoint.prod.sh $APP_HOME
@@ -79,4 +81,7 @@ RUN chown -R app:app $APP_HOME
 USER app
 
 # run entrypoint.prod
-ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+# ENTRYPOINT ["/home/app/web/entrypoint.prod.sh"]
+
+# run gunicorn
+CMD gunicorn webdevsite.wsgi:application --bind 0.0.0.0:$PORT

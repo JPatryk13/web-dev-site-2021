@@ -75,6 +75,10 @@
             </div>
 
           </form>
+
+          {% block mobile-hire-me-submit-button %}
+            {% include "partials/text-button.html" with id="mobile-hire-me-submit-button" text="SUBMIT" blue=True form_id="hire_me_form" %}
+          {% endblock %}
         {% endif %}
       </div> <!-- .column.is-8 -->
     </div> <!-- columns -->

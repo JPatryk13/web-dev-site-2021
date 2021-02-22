@@ -27,12 +27,22 @@
 
         h5 + div {
           position: absolute;
-          bottom: 11.5rem;
+          bottom: 10.8rem; // was 11.5rem
 
           // it just doesn't fit there anymore
           @media screen and (max-width: 1215px) { display: none; }
         }
       }
+
+      // invisible for larger than 1215px width screens
+      form + .btn-wrapper {
+        margin-top: 1.5rem;
+        display: none;
+      }
+      // goes visible if there ain't enough space
+      @media screen and (min-width: 768px) and (max-width: 1215px) { form + .btn-wrapper { display: block; } }
+      @media screen and (max-width: 768px) { .mobile-btn-wrapper { margin-top: 1.5rem;} }
+
     }
   }
 

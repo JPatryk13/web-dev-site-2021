@@ -28,6 +28,9 @@
         h5 + div {
           position: absolute;
           bottom: 11.5rem;
+
+          // it just doesn't fit there anymore
+          @media screen and (max-width: 1215px) { display: none; }
         }
       }
     }

@@ -1,6 +1,6 @@
 nav {
   opacity: 0;
-  
+
   .navbar-menu {
     .navbar-start {
       a {
@@ -31,8 +31,8 @@ nav {
           bottom: 0.75rem;
         }
 
-        &:active { filter: drop-shadow(0 0 4px rgba($medium-grey, 1)); }
-        &:hover { img { bottom: 0.4rem; } }
+        &:hover img { bottom: 0.4rem; }
+        &:active img { filter: brightness(145%); }
       }
     }
   }

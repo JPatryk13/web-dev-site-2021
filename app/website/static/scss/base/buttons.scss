@@ -28,14 +28,10 @@
       z-index: 2;
     }
 
-    .btn-with-text {
-      color: $white;
-    }
+    .btn-with-text { color: $white; }
   }
 
-  &:active {
-    filter: drop-shadow(0 0 4px rgba($medium-grey, 1));
-  }
+  &:active { img, &::before { filter: brightness(145%); } }
 
   img {
     display: block;
@@ -60,24 +56,14 @@
   }
 
   &.white {
-    &::before {
-      background-color: $white;
-    }
-
-    &:hover {
-      .btn-with-text {
-        color: $blue;
-      }
-    }
-
-    &:active {
-      filter: $white-shadow;
-    }
-
     .btn-with-text {
       background: rgba($white, 0.2);
       color: $white;
     }
+
+    &::before { background-color: $white; }
+    &:hover .btn-with-text { color: $blue; }
+    &:active { filter: brightness(65%); }
   }
 }
 
@@ -104,8 +90,8 @@
     transition: .3s ease;
   }
 
-  &.blue { &:active { filter: drop-shadow(0 0 4px rgba($medium-grey, 1)); } }
-  &.white { &:active { filter: drop-shadow(0 0 4px rgba($bright-grey, 1)); } }
+  &.blue:active { filter: brightness(145%); }
+  &.white:active { filter: brightness(65%); }
 
   &.up { transform: rotate(180deg); }
   &.down { /* nothing, it's already pointing down */ }

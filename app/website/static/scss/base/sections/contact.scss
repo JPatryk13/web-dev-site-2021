@@ -77,7 +77,7 @@
                   top: 0;
                 }
 
-                &:active { filter: drop-shadow(0 0 4px rgba($bright-grey, 1)); }
+                &:active img { filter: brightness(55%); }
                 &:hover { img { top: 0.5rem; } }
               }
             }
@@ -96,9 +96,7 @@
           .level-item:nth-child(1) {
             width: 80%;
 
-            .bottom-line {
-              width: 100%;
-            }
+            .bottom-line { width: 100%; }
           }
         }
       } // &:nth-child(3)

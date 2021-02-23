@@ -7,6 +7,10 @@
     height: calc(50vh - 26px);
     display: flex;
     align-items: flex-end;
+    
+    @media screen and (max-height: 420px) {
+      height: calc(60vh - 26px);
+    }
 
     img {
       width: 50%;
@@ -17,6 +21,11 @@
   .column {
     height: calc(50vh - 26px);
     position: relative;
+
+    @media screen and (max-height: 420px) {
+      height: calc(40vh - 26px);
+      .hero-buttons { display: none; }
+    }
 
     .hero-description {
       p {
@@ -45,6 +54,8 @@
           }
         }
       }
+
+      @media screen and (max-height: 600px) { display: none; }
     }
   }
 }

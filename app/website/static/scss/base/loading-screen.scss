@@ -1,9 +1,9 @@
 .loader-wrapper {
-  position: absolute;
+  position: sticky;
   top: 0;
   left: 0;
-  height: 100%;
-  width: 100%;
+  height: 0vh;
+  width: 100vw;
   background: white;
   display: flex;
   justify-content: center;
@@ -26,5 +26,6 @@
   &.is-active {
     opacity: 1;
     z-index: 3; // just in case if something has z-index: 2 (like buttons or whatever)
+    height: 100vh;
   }
 }

@@ -30,22 +30,52 @@
 <script type="text/javascript">
   // Load elemnts one by one on the main page
   window.addEventListener('load', function () {
+    // get height of sections within th page
     const sectionYRange = getSectionHeights();
-    const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
-    const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
-    loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+
+    if (window.innerWidth > 768) {
+      // return elements to load on the page and their haight
+      const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+      // return viewport position on the page based on its top and bottom edge
+      const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
+      // load element that appears to be in the viewport
+      loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+    } else {
+      // get all the elements on the page
+      const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+      // load them all
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.opacity = 1;
+      }
+    }
   }, false);
 
   window.addEventListener('scroll', function () {
-    const sectionYRange = getSectionHeights();
-    const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
-    const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
-    loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+    // Load elements one by one while scrolling (loaded elements in the viewport only)
+    if (window.innerWidth > 768) {
+      const sectionYRange = getSectionHeights();
+      const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+      const { viewportTop, viewportBottom } = getViewportPosition(sectionYRange);
+      loadElement(viewportTop, viewportBottom, elementsYRange, elements);
+    }
 
+    // switch the 'active' state on the menu (navbar) options while scrolling through sections
     let desktopMenuItems = document.querySelectorAll('#desktopMenu.navbar-menu .navbar-start .navbar-item');
     let mobileMenuItems = document.querySelectorAll('#mobileMenu.navbar-menu .navbar-start .navbar-item');
     addActiveClassAtIndex(desktopMenuItems);
     addActiveClassAtIndex(mobileMenuItems);
+  }, false);
+
+  window.addEventListener('resize', function () {
+    // Load all the elements if someone resizes the page to check how it wroks on mobiles
+    if (window.innerWidth < 768) {
+      // get all the elements on the page
+      const { elements, elementsYRange } = elementsPositionOnThePage(sectionYRange);
+      // load them all
+      for (var i = 0; i < elements.length; i++) {
+        elements[i].style.opacity = 1;
+      }
+    }
   }, false);
 </script>
 

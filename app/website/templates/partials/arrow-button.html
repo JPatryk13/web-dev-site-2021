@@ -2,8 +2,8 @@
 
 {% if active %}
   {% with "frame-"|add:id as frame_id %}
-  {% with "img/buttons/frame-"|add:color|add:"@2x.png" as frame_path %}
-  {% with "img/buttons/btn-down-"|add:color|add:"@2x.png" as diamond_path %}
+  {% with "img/buttons/frame-"|add:color|add:".png" as frame_path %}
+  {% with "img/buttons/btn-down-"|add:color|add:".png" as diamond_path %}
     <div class="btn-arrow {{ color }} {{ direction }}" onmouseover="arrowMouseOver('{{ frame_id }}', '{{ id }}')" onmouseout="arrowMouseOut('{{ frame_id }}', '{{ id }}')" onclick="location.href='{{ go_to_id }}'">
       <img id="{{ frame_id }}" src="{% static frame_path %}">
       <img id="{{ id }}" src="{% static diamond_path %}">
@@ -19,10 +19,10 @@
   {% endwith %}
 {% else %}
   <div class="btn-arrow {{ direction }}">
-    <img src="{% static 'img/buttons/inactive-down-btn@2x.png' %}">
+    <img src="{% static 'img/buttons/inactive-down-btn.png' %}">
   </div>
 
   <div class="mobile-btn-arrow {{ direction }}">
-    <img src="{% static 'img/buttons/mobile-inactive-down-btn@2x.png' %}">
+    <img src="{% static 'img/buttons/mobile-inactive-down-btn.png' %}">
   </div>
 {% endif %}

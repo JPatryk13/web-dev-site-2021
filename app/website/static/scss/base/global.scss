@@ -57,7 +57,7 @@ h1, h2, h3, h4, h5, p { color: black; }
 
 #services,
 #contact {
-  background-image:       $hero-image;
+  background-image:       $blue-bg-img-building;
   background-repeat:      no-repeat;
   background-attachment:  fixed;
   background-size:        cover;
@@ -88,12 +88,21 @@ h1, h2, h3, h4, h5, p { color: black; }
 #hire-me { background-position:   center 5%; }
 
 #home {
-  background-image:       $home-background, $hero-image;
+  background-image:       $home-background, $blue-bg-img-building;
   background-repeat:      no-repeat, no-repeat;
   background-attachment:  scroll, fixed;
   background-size:        cover, cover;
   background-color:       #999, #999;
   background-position:    center 5%, center 45%;
+
+  @media screen and (max-width: 800px) {
+    background-image:       $background-image;
+    background-repeat:      no-repeat;
+    background-attachment:  scroll;
+    background-size:        cover;
+    background-color:       #999;
+    background-position:    center 5%;
+  }
 }
 
 .left-line {

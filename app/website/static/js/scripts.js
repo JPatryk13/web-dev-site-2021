@@ -209,7 +209,7 @@ var elementsPositionOnThePage = function (sectionYRange) {
 
   homeColumns.forEach((columns, i) => {
     if (i == 0) {
-      top = 0; // home section bottom position
+      top = 0; // home section top position
     } else {
       top = bottom;
     }

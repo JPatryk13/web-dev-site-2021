@@ -15,6 +15,7 @@ Web-dev services website utilising **Django** framework and **Docker** container
 
 ## System:
 1. Fedora 32
+2. Windows 10
 
 ## Requirements:
 1. GitHub Account + GitHub CLI / GitHub Desktop

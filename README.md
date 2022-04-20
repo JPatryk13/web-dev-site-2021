@@ -1,5 +1,5 @@
 # Webdevsite
-Web-dev services website utilising **Django** framework and **Docker** containers. Single page layout and modern minimal design created using **Bulma**, **Sass** and **JavaScript**. I made it to practise back-end, front-end as well as design. The website runs locally on **Linux Fedora 32** and **Microsoft Windows 10**.
+Web-dev services website utilizing **Django** framework and **Docker** containers. Single page layout and modern minimal design created using **Bulma**, **Sass** and **JavaScript**. I made it to practise back-end, front-end as well as design. The website runs locally on **Linux Fedora 32** and **Microsoft Windows 10**.
 
 ## Stack:
  - Docker
